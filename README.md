@@ -19,3 +19,4 @@ The current version will remain as 0.1 until fully functional local gameplay is 
   - [x] Being able to configure the speed of the game.
   - [x] Being able to configure the size of the game area.
   - [ ] Setup and launch the game according to these configurations.
+- [x] Aquire an adequate amount of visual satisfaction when opening the game.
