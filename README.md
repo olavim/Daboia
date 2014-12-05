@@ -1,7 +1,7 @@
 Daboia
 ======
 
-The most niche game of them all.
+**The most niche game of them all.**
 
 Daboia is a game of snake, where players can program their own AIs to do their dirty work, and put their state-of-the-art snakes to compete with each other. Even though writing the best imaginable algorithm to win every game is the primary goal of this game, writing a keyboard-operable "AI" for a more traditional gameplay is entirely possible, and even made convenient for the faint of heart.
 
