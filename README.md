@@ -3,7 +3,7 @@ Daboia
 
 Daboia is a game of snake, where players can program their own AIs to do their dirty work, and put their state-of-the-art snakes to compete with each other. Even though writing the best imaginable algorithm to win every game is the primary goal of this game, writing a keyboard-operable "AI" for a more traditional gameplay is entirely possible, and even made convenient for the faint of heart.
 
-If programming is not one of your skills, fear not; a WASD-operated "AI" ~~is~~ will be included with the game together with various tutorials and examples of how writing similar AIs, and AIs for this game in general, can be accomplished. I would argue that this is a fantastic way of hopping in to the world of programming!
+If programming is not one of your skills, fear not; a WASD-operated "AI" ~~is~~ will be included with the game together with various tutorials and examples of how writing similar AIs, and AIs for this game in general, can be accomplished. One could argue that this is a fantastic way of hopping in to the world of programming!
 
 The game is written in Java 8. The source code is wrapped inside a NetBeans-project.
 
