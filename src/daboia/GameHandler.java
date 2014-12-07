@@ -57,13 +57,6 @@ public class GameHandler {
         gameThread = null;
     }
     
-    public static boolean registerPlayer(Player player) {
-        DaboiaLogic logicHandler = player.getLogicHandler();        
-        logicHandler.setDaboiaGame(gameHandler.daboiaGame);
-        logicHandler.init();
-        return true;
-    }
-    
     public static DaboiaGame getDaboiaGame() {        
         return gameHandler.daboiaGame;
     }
@@ -75,21 +68,45 @@ public class GameHandler {
     private final ScheduledExecutorService moveSchedule;
 
     public GameHandler(Collection<Player> players, int width, int height) {
-        daboiaGame = new DaboiaGame(width, height, players);
+        if (players.isEmpty()) {
+            throw new IllegalArgumentException("No players given");
+        }
+        
+        if (width < 7 || height < 7) {
+            throw new IllegalArgumentException("Width and height must be at least 7");
+        }
+        
+        daboiaGame = new DaboiaGame(players, width, height);
         gameInterface = new GameInterface(daboiaGame);
         moveSchedule = Executors.newSingleThreadScheduledExecutor();
+        initPlayers(players);
     }
     
-    public void startGame(int speed) {
+    private void initPlayers(Collection<Player> players) {
+        for (Player player : players) {
+            DaboiaLogic logicHandler = player.getLogicHandler();        
+            logicHandler.setDaboiaGame(daboiaGame);
+            logicHandler.init();
+        }
+    }
+    
+    public void startGame(int speed) {        
         gameInterface.showWindow();
-        
         Runnable moveCmd = () -> {
             for (Player player : daboiaGame.getPlayers()) {
                 if (player.isDead()) {
                     continue;
                 }
 
-                String move = player.getLogicHandler().getMove();
+                String move = null;
+                
+                try {
+                    move = player.getLogicHandler().getMove();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    stopGame();
+                }
+                
                 Direction direction = Direction.directionFromString(move);
                 daboiaGame.makeMove(player, direction);
             }
@@ -98,12 +115,16 @@ public class GameHandler {
             daboiaGame.wait(speed);
             
             if (daboiaGame.gameOver()) {
-                cleanSession(2000);
-                moveSchedule.shutdown();
+                stopGame();
             }
         };
         
         moveSchedule.scheduleAtFixedRate(moveCmd, 1000, speed, TimeUnit.MILLISECONDS);        
+    }
+    
+    private void stopGame() {
+        cleanSession(2000);
+        moveSchedule.shutdown();
     }
     
     public void interrupt() {

@@ -67,10 +67,5 @@ public class GameInterface implements UserInterface {
             }
         });
     }
-
-//    @Override
-//    public void setParent() {
-//        
-//    }
     
 }

@@ -1,30 +1,32 @@
 
 package daboia.error;
 
-import java.awt.Container;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 
-public class ErrorDialog extends JFrame {
+public class ErrorDialog extends JDialog {
     
     public static void showMsg(String message) {
         showMsg(null, message);
     }
     
-    public static void showMsg(final Container parent, String message) {
+    public static void showMsg(Window parent, String message) {
         SwingUtilities.invokeLater(() -> {
-            new ErrorDialog(parent, message);
+            ErrorDialog dialog = new ErrorDialog(parent, message);
+            dialog.showDialog();
         });
     }
     
-    private ErrorDialog(Container parent, String message) {
-        super("Error");
+    private ErrorDialog(Window parent, String message) {
+        super(parent, "Error", JDialog.DEFAULT_MODALITY_TYPE);
         this.setResizable(false);
         
         JPanel contentPane = (JPanel) this.getContentPane();
@@ -39,10 +41,10 @@ public class ErrorDialog extends JFrame {
         contentPane.add(icon, "gap top 5");
         contentPane.add(new JLabel(message), "wrap, gap left 5, gap right 10");
         contentPane.add(okButton, "span, center, gap 10");
-        
+    }
+    
+    public void showDialog() {
         this.pack();
-        this.setLocationRelativeTo(parent);
-//        this.setLocationByPlatform(true);
         this.setVisible(true);
     }
 

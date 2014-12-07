@@ -9,13 +9,10 @@ import daboia.util.Pair;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,15 +63,18 @@ public class PlayerList extends LabelList<Player> {
             westPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(200, 200, 200)));
             westPanel.setBackground(new Color(230, 230, 230));
             westPanel.add(colorRectangle, "west, grow, gap 10 0 6 0");
-            westPanel.add(playerName, "west, grow, gap 10 10 6 0");
+            westPanel.add(playerName, "west, grow, gap 10 10 6 0");            
             
+            Color logicLabelColor = PlayerList.this.getForeground().brighter().brighter();
             String text = "No logic";
             if (player.getLogicHandler() != null) {
                 text = player.getLogicHandler().title();
+                logicLabelColor = PlayerList.this.getForeground().brighter();
             }
+            
             this.selectedLogicLabel = new JLabel(text);
             this.selectedLogicLabel.setFont(PlayerList.this.getFont());
-            this.selectedLogicLabel.setForeground(PlayerList.this.getForeground().brighter().brighter());
+            this.selectedLogicLabel.setForeground(logicLabelColor);
             
             SelectLogicShape selectLogicShape = new SelectLogicShape(10);
             selectLogicShape.addMouseListener(new SelectLogicListener(this, PlayerList.this, player));            

@@ -26,10 +26,10 @@ public class Main {
         mainInterface.showWindow();
     }
     
-    public static <E extends DaboiaLogic> void launchPreview(Collection<Player> players, int speed, int width, int height) {
+    public static <E extends DaboiaLogic> void launchPreview(Collection<Player> players, int speed, int width, int height) {        
         try {
             GameHandler.setup(players, width, height);
-            launchGame(speed);
+            launchGame(speed + 1);
         } catch (LaunchException ex) {
             System.err.println("Could not launch game: " + ex.getMessage());
             System.err.println("Terminating...");

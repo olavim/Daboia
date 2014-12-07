@@ -17,8 +17,8 @@ public class DaboiaGame {
     private int numPlayersAlive;
     private int numMovesNotEaten;
     
-    public DaboiaGame(int width, int height, Collection<Player> players) {
-        this.players = new ArrayList<>();
+    public DaboiaGame(Collection<Player> players, int width, int height) {
+        this.players = new ArrayList<>(players);
         this.apple = new Piece(width/2, height/2);
         this.gameOver = false;
         this.board = new int[height][width];

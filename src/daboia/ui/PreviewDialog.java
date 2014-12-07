@@ -4,11 +4,16 @@ package daboia.ui;
 import daboia.ui.list.PlayerList;
 import daboia.action.AddPlayerAction;
 import daboia.domain.Player;
+import daboia.error.ErrorDialog;
 import daboia.ui.button.LabelButton;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -26,26 +31,73 @@ public class PreviewDialog extends JDialog {
     private JTextField heightField;
     private JSlider speedSlider;
     private PlayerList playerList;
+    private boolean shouldStartPreview;
     
     public PreviewDialog() {
         this(null);
     }
     
     public PreviewDialog(Frame parent) {
-        super(parent, "Preview", JDialog.DEFAULT_MODALITY_TYPE);
+        super(parent, "Preview", JDialog.DEFAULT_MODALITY_TYPE);        
         this.parent = parent;
+        
+        speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        widthField = new JTextField(3);
+        heightField = new JTextField(3);
+        playerList = new PlayerList();
+        shouldStartPreview = false;
         
         addContents(this.getContentPane());
     }
     
-    public void showDialog() {
+    public Map<String, Object> showDialog() {
         this.pack();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
+        
+        if (shouldStartPreview) {
+            return generateSettings();
+        } else {
+            return null;
+        }
     }
     
-    private void addContents(Container container) {        
+    private Map<String, Object> generateSettings() {        
+        Collection<Player> players = this.playerList.getObjects();
+        int width = Integer.parseInt(this.widthField.getText());
+        int height = Integer.parseInt(this.heightField.getText());
+        int speed = calculateGameSpeed(this.speedSlider.getValue());
+        
+        Map<String, Object> settings = new HashMap<>();
+        settings.put("players", players);
+        settings.put("width", width);
+        settings.put("height", height);
+        settings.put("speed", speed);
+        
+        return settings;
+    }
+    
+    private int calculateGameSpeed(int sliderValue) {
+        /* log10 needs a value greater than 0 */
+        if (sliderValue < 1) {
+            sliderValue = 1;
+        }
+        
+        double speed = 100 - 50 * Math.log10(sliderValue);
+        return (int) (speed * 5);
+    }
+    
+    private void addContents(Container container) {
         LabelButton startButton = new LabelButton("Start", true);
+        startButton.addActionListener((ActionEvent e) -> {
+            String error = checkSettings();
+            if (error == null) {
+                shouldStartPreview = true;
+                dispose();
+            } else {
+                ErrorDialog.showMsg(PreviewDialog.this, error);
+            }
+        });
         
         container.setLayout(new MigLayout("wrap 1, insets 0", "[grow]", "[]0"));
         
@@ -57,16 +109,41 @@ public class PreviewDialog extends JDialog {
         container.add(startButton, "center, grow, gapy 10 10");        
     }
     
+    private String checkSettings() {
+        Collection<Player> players = this.playerList.getObjects();
+        
+        if (players.isEmpty()) {
+            return "No players specified";
+        } else if (players.size() > 6) {
+            return "Maximum amount of players is 6";
+        }
+        
+        int width = Integer.parseInt(this.widthField.getText());
+        int height = Integer.parseInt(this.heightField.getText());
+        
+        if (width < 7 || height < 7) {
+            return "Width and height must be at least 7";
+        }
+        
+        for (Player player : players) {
+            if (player.getLogicHandler() == null) {
+                return player.getName() + " does not have a logic";
+            }
+        }
+        
+        return null;
+    }
+    
     private JPanel createSpeedPanel() {
         JLabel speedSliderLabel = new JLabel("Game speed");
         speedSliderLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
         speedSliderLabel.setForeground(new Color(80, 80, 80));
         
-        speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        speedSlider.setSnapToTicks(true);
         speedSlider.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         speedSlider.setPaintLabels(true);
-        speedSlider.setMinorTickSpacing(10);
-        speedSlider.setMajorTickSpacing(50);
+        speedSlider.setMinorTickSpacing(5);
+        speedSlider.setMajorTickSpacing(25);
         speedSlider.setPaintTicks(true);
         speedSlider.setOpaque(false);
         
@@ -85,7 +162,6 @@ public class PreviewDialog extends JDialog {
         JLabel widthLabel = new JLabel("Width:");
         widthLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
         
-        widthField = new JTextField(3);
         widthField.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
         widthField.setBorder(fieldBorder);
         widthField.setText("10");
@@ -93,7 +169,6 @@ public class PreviewDialog extends JDialog {
         JLabel heightLabel = new JLabel("Height:");
         heightLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
         
-        heightField = new JTextField(3);
         heightField.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
         heightField.setBorder(fieldBorder);
         heightField.setText("10");
@@ -110,7 +185,6 @@ public class PreviewDialog extends JDialog {
     }
     
     private JPanel createPlayerPanel() {
-        playerList = new PlayerList();
         playerList.addObject(new Player(1, 1, 0, "Player 1"));
         
         LabelButton addPlayerButton = new LabelButton(new AddPlayerAction("Add Player", playerList, this), true);

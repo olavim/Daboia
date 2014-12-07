@@ -3,12 +3,16 @@ package daboia.ui.button;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 
 public class Button extends JComponent {
     
+    private Collection<ActionListener> actionListeners;
     private AbstractAction action;    
     private ButtonState state;
     
@@ -16,6 +20,7 @@ public class Button extends JComponent {
     
     public Button(AbstractAction action) {
         this.addMouseListener(new ButtonListener(this));
+        this.actionListeners = new ArrayList<>();
         this.state = ButtonState.DEFAULT;
         this.action = action;
         this.label = (String) action.getValue(AbstractAction.NAME);
@@ -34,9 +39,18 @@ public class Button extends JComponent {
         return ButtonListener.lastEnteredComponent();
     }
     
+    public void addActionListener(ActionListener listener) {
+        this.actionListeners.add(listener);
+    }
+    
     public void notifyListeners(MouseEvent e) {
         ActionEvent evt = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, new String(), e.getWhen(), e.getModifiers());
         action.actionPerformed(evt);
+        
+        for (ActionListener listener : this.actionListeners) {
+            ActionEvent event = new ActionEvent(e.getSource(), e.getID(), e.paramString());
+            listener.actionPerformed(event);
+        }
     }
     
     public void setState(ButtonState state) {
