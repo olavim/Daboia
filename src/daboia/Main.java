@@ -1,6 +1,7 @@
 package daboia;
 
 import daboia.config.ConfigurationManager;
+import daboia.domain.GameSettings;
 import daboia.domain.Player;
 import daboia.ui.MainInterface;
 import daboia.plugin.PluginManager;
@@ -26,7 +27,12 @@ public class Main {
         mainInterface.showWindow();
     }
     
-    public static <E extends DaboiaLogic> void launchPreview(Collection<Player> players, int speed, int width, int height) {        
+    public static <E extends DaboiaLogic> void launchPreview(GameSettings settings) {
+        Collection<Player> players = settings.getPlayers();
+        int speed = settings.getFramerate();
+        int width = settings.getWidth();
+        int height = settings.getHeight();
+        
         try {
             GameHandler.setup(players, width, height);
             launchGame(speed + 1);

@@ -1,6 +1,7 @@
 package daboia;
  
 import daboia.domain.DaboiaGame;
+import daboia.domain.GameSettings;
 import daboia.domain.Player;
 import daboia.util.ClassUtils;
 import java.util.Arrays;
@@ -17,7 +18,8 @@ public abstract class DaboiaLogic {
         E logicHandler = ClassUtils.getClassInstance(clazz);
         Player player = new Player(1, 1, 0, "Player");
         player.setLogicHandler(logicHandler);
-        Main.launchPreview(Arrays.asList(player), speed, width, height);
+        GameSettings settings = new GameSettings(Arrays.asList(player), speed, width, height);
+        Main.launchPreview(settings);
     }
     
     private DaboiaGame daboiaGame;    

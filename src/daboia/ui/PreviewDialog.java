@@ -1,27 +1,23 @@
 
 package daboia.ui;
 
+import daboia.DaboiaLogic;
 import daboia.ui.list.PlayerList;
 import daboia.action.AddPlayerAction;
+import daboia.domain.GameSettings;
 import daboia.domain.Player;
+import daboia.domain.PlayerFactory;
 import daboia.error.ErrorDialog;
 import daboia.ui.button.LabelButton;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Frame;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
+import java.util.List;
+
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
 import net.miginfocom.swing.MigLayout;
 
 public class PreviewDialog extends JDialog {
@@ -44,58 +40,43 @@ public class PreviewDialog extends JDialog {
         speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
         widthField = new JTextField(3);
         heightField = new JTextField(3);
-        playerList = new PlayerList();
+        playerList = new PlayerList(this);
         shouldStartPreview = false;
         
         addContents(this.getContentPane());
     }
     
-    public Map<String, Object> showDialog() {
+    public GameSettings showDialog() {
         this.pack();
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
         
         if (shouldStartPreview) {
-            return generateSettings();
-        } else {
-            return null;
-        }
+            return generateSettings();            
+        }        
+        
+        return null;
     }
     
-    private Map<String, Object> generateSettings() {        
-        Collection<Player> players = this.playerList.getObjects();
+    private GameSettings generateSettings() {
         int width = Integer.parseInt(this.widthField.getText());
         int height = Integer.parseInt(this.heightField.getText());
-        int speed = calculateGameSpeed(this.speedSlider.getValue());
+        int speed = this.speedSlider.getValue();        
+        List<Player> players = PlayerFactory.generatePlayers(this.playerList.getObjects(), width, height);
         
-        Map<String, Object> settings = new HashMap<>();
-        settings.put("players", players);
-        settings.put("width", width);
-        settings.put("height", height);
-        settings.put("speed", speed);
-        
-        return settings;
-    }
-    
-    private int calculateGameSpeed(int sliderValue) {
-        /* log10 needs a value greater than 0 */
-        if (sliderValue < 1) {
-            sliderValue = 1;
-        }
-        
-        double speed = 100 - 50 * Math.log10(sliderValue);
-        return (int) (speed * 5);
+        return new GameSettings(players, width, height, speed);
     }
     
     private void addContents(Container container) {
         LabelButton startButton = new LabelButton("Start", true);
         startButton.addActionListener((ActionEvent e) -> {
-            String error = checkSettings();
-            if (error == null) {
+            try {
+                /* throws an exception if the settings are invalid */
+                generateSettings();            
                 shouldStartPreview = true;
                 dispose();
-            } else {
-                ErrorDialog.showMsg(PreviewDialog.this, error);
+            } catch (IllegalArgumentException ex) {
+                ErrorDialog.showMsg(ex.getMessage());
             }
         });
         
@@ -107,31 +88,6 @@ public class PreviewDialog extends JDialog {
         container.add(new PlainSeparator(true), "grow, gapy 0 15");
         container.add(createPlayerPanel());
         container.add(startButton, "center, grow, gapy 10 10");        
-    }
-    
-    private String checkSettings() {
-        Collection<Player> players = this.playerList.getObjects();
-        
-        if (players.isEmpty()) {
-            return "No players specified";
-        } else if (players.size() > 6) {
-            return "Maximum amount of players is 6";
-        }
-        
-        int width = Integer.parseInt(this.widthField.getText());
-        int height = Integer.parseInt(this.heightField.getText());
-        
-        if (width < 7 || height < 7) {
-            return "Width and height must be at least 7";
-        }
-        
-        for (Player player : players) {
-            if (player.getLogicHandler() == null) {
-                return player.getName() + " does not have a logic";
-            }
-        }
-        
-        return null;
     }
     
     private JPanel createSpeedPanel() {

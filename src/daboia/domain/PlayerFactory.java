@@ -3,21 +3,29 @@ package daboia.domain;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public final class PlayerFactory {
 
-    public static Collection<Player> generatePlayers(int amount, int boardWidth, int boardHeight) {
+    public static List<Player> generatePlayers(List<Player> templatePlayers, int boardWidth, int boardHeight) {
+        int amount = templatePlayers.size();
         if (amount < 1) {
             throw new IllegalArgumentException("There must be a positive amount of players");
         } else if (amount > 6) {
             throw new IllegalArgumentException("There may be at most 6 players");
         }
         
-        Collection<Player> players = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
         
         for (int i = 0; i < amount; i++) {
-            players.add(generatePlayer(i, boardWidth, boardHeight));
+            Player player = generatePlayer(i, boardWidth, boardHeight);
+            if (templatePlayers.get(i).getLogicHandler() == null) {
+                throw new IllegalArgumentException(player.getName() + " does not have a logic");
+            }
+            
+            player.setLogicHandler(templatePlayers.get(i).getLogicHandler());
+            player.setSnakeColor(templatePlayers.get(i).getSnakeColor());
+            players.add(player);
         }
         
         return players;

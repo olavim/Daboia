@@ -5,7 +5,7 @@ import daboia.ui.list.ComponentList;
 import daboia.ui.button.LabelButton;
 import java.awt.Container;
 import java.awt.Dialog;
-import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JDialog;
@@ -13,7 +13,7 @@ import net.miginfocom.swing.MigLayout;
 
 public class ComponentListChooser <T> extends JDialog {
     
-    private Frame parent;
+    private Window parent;
     private ComponentList<T> componentList;
     private T selected;
     
@@ -25,7 +25,7 @@ public class ComponentListChooser <T> extends JDialog {
         this(null, list);
     }
     
-    public ComponentListChooser(Frame parent, ComponentList<T> list) {
+    public ComponentListChooser(Window parent, ComponentList<T> list) {
         super(parent, "Chooser", Dialog.DEFAULT_MODALITY_TYPE);
         
         this.componentList = list;

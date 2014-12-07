@@ -22,12 +22,6 @@ public class GamePanel extends JPanel {
     private final static int padding = 5;
     
     private final static Color appleColor = new Color(255, 100, 100);
-    private final static Color[] playerColors = new Color[] {
-        new Color(0x226666),
-        new Color(0x2D882D),
-        new Color(0x9F4F89),
-        new Color(0xAA6C39)
-    };
     
     private final DaboiaGame daboiaGame;
     
@@ -43,7 +37,7 @@ public class GamePanel extends JPanel {
         for (Player player : daboiaGame.getPlayers()) {            
             Path2D path = getSnakePath(player.snake());
             
-            g2.setColor(playerColors[player.getID()]);
+            g2.setColor(player.getSnakeColor());
             g2.setStroke(new BasicStroke(snakeSize));
             g2.draw(path);
             
@@ -51,7 +45,7 @@ public class GamePanel extends JPanel {
             int hx = translateToBoard(head.x);
             int hy = translateToBoard(head.y);
             
-            g2.setColor(playerColors[player.getID()].brighter());
+            g2.setColor(player.getSnakeColor().brighter());
             g2.drawLine(hx, hy, hx, hy);
         }
         

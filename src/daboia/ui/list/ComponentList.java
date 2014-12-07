@@ -42,7 +42,7 @@ public abstract class ComponentList <T> extends JComponent {
         this.selectable = selectable;
     }
     
-    public Collection<T> getObjects() {
+    public List<T> getObjects() {
         return this.objects;
     }
     

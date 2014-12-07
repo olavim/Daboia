@@ -93,28 +93,28 @@ public class GameHandler {
     public void startGame(int speed) {        
         gameInterface.showWindow();
         Runnable moveCmd = () -> {
-            for (Player player : daboiaGame.getPlayers()) {
-                if (player.isDead()) {
-                    continue;
+            try {
+                
+                for (Player player : daboiaGame.getPlayers()) {
+                    if (player.isDead()) {
+                        continue;
+                    }
+
+                    String move = player.getLogicHandler().getMove();
+
+                    Direction direction = Direction.directionFromString(move);
+                    daboiaGame.makeMove(player, direction);
                 }
 
-                String move = null;
-                
-                try {
-                    move = player.getLogicHandler().getMove();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                gameInterface.getFrame().repaint();
+                daboiaGame.wait(speed);
+
+                if (daboiaGame.gameOver()) {
                     stopGame();
                 }
                 
-                Direction direction = Direction.directionFromString(move);
-                daboiaGame.makeMove(player, direction);
-            }
-
-            gameInterface.getFrame().repaint();
-            daboiaGame.wait(speed);
-            
-            if (daboiaGame.gameOver()) {
+            } catch (Exception ex) {
+                ex.printStackTrace();
                 stopGame();
             }
         };

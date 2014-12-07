@@ -1,7 +1,7 @@
 
 package daboia.ui.button;
 
-import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -20,6 +20,7 @@ public class Button extends JComponent {
     
     public Button(AbstractAction action) {
         this.addMouseListener(new ButtonListener(this));
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         this.actionListeners = new ArrayList<>();
         this.state = ButtonState.DEFAULT;
         this.action = action;
@@ -33,10 +34,6 @@ public class Button extends JComponent {
     
     public String getLabel() {
         return this.label;
-    }
-    
-    public Component lastEntered() {
-        return ButtonListener.lastEnteredComponent();
     }
     
     public void addActionListener(ActionListener listener) {
