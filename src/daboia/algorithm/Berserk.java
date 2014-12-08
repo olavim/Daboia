@@ -54,7 +54,7 @@ public class Berserk extends DaboiaLogic {
         }
         
         int[][] board = daboiaGame().board();
-        Piece snakeHead = player().snake().head();
+        Piece snakeHead = player().getSnake().getHead();
         
         int x = 0;
         int y = 0;
@@ -70,7 +70,7 @@ public class Berserk extends DaboiaLogic {
         boolean canMove = SnakeLogicUtils.canMove(board, x, y);
         int possibilities = SnakeLogicUtils.possibilities(board, x, y, new ArrayList<>());
         
-        return canMove && possibilities > player().snake().length() + 20;
+        return canMove && possibilities > player().getSnake().getLength() + 20;
     }
     
     // Seuraava best move A* -algoritmilla
@@ -81,8 +81,8 @@ public class Berserk extends DaboiaLogic {
         ArrayList<Location> visited = new ArrayList<>();
         Location location;
 {
-        int headX = player().snake().head().x;
-        int headY = player().snake().head().y;
+        int headX = player().getSnake().getHead().x;
+        int headY = player().getSnake().getHead().y;
         int score = SnakeLogicUtils.calculateScore(headX, goalX, headY, goalY);
         location = new Location(headX, headY, score, new ArrayList<>());
 }        
@@ -123,7 +123,7 @@ public class Berserk extends DaboiaLogic {
     private String stall() {
         int[][] board = daboiaGame().board();
         
-        Piece snakeHead = player().snake().head();
+        Piece snakeHead = player().getSnake().getHead();
         
         int max = 0;
         int bestIndex = -1;

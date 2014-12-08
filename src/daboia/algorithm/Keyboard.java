@@ -28,8 +28,8 @@ public class Keyboard extends DaboiaLogic {
     }
     
     private boolean isNeck(int dirX, int dirY) {
-        Piece snakeHead = player().snake().head();
-        Piece neck = player().snake().pieces().get(player().snake().length() - 2);
+        Piece snakeHead = player().getSnake().getHead();
+        Piece neck = player().getSnake().getPieces().get(player().getSnake().getLength() - 2);
         
         return snakeHead.x + dirX == neck.x && snakeHead.y + dirY == neck.y;
     }

@@ -6,7 +6,7 @@ import daboia.domain.Player;
 import daboia.util.ClassUtils;
 import java.util.Arrays;
 
-public abstract class DaboiaLogic {    
+public abstract class DaboiaLogic implements Cloneable {    
     protected static final int APPLE     = 8;
     protected static final int FLOOR     = 0;
     protected static final int OBSTACLE  = -1;
@@ -74,12 +74,21 @@ public abstract class DaboiaLogic {
         return this.lastKeyTyped;
     }
     
-    public abstract void onLaunch(); 
-    public abstract String getMove();
+    @Override
+    public DaboiaLogic clone() {
+        try {
+            return (DaboiaLogic) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            return null;
+        }
+    }
     
     @Override
     public String toString() {
         return this.title;
     }
+    
+    public abstract void onLaunch(); 
+    public abstract String getMove();
    
 }

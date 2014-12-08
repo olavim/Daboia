@@ -34,14 +34,18 @@ public class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         
-        for (Player player : daboiaGame.getPlayers()) {            
-            Path2D path = getSnakePath(player.snake());
+        for (Player player : daboiaGame.getPlayers()) {
+            if (!player.shouldBeDrawn()) {
+                continue;
+            }
+            
+            Path2D path = getSnakePath(player.getSnake());
             
             g2.setColor(player.getSnakeColor());
             g2.setStroke(new BasicStroke(snakeSize));
             g2.draw(path);
             
-            Piece head = player.snake().head();
+            Piece head = player.getSnake().getHead();
             int hx = translateToBoard(head.x);
             int hy = translateToBoard(head.y);
             
@@ -61,8 +65,8 @@ public class GamePanel extends JPanel {
     private Path2D getSnakePath(Snake snake) {
         Path2D path = new Path2D.Double();
 
-        List<Piece> snakePieces = snake.pieces();
-        Piece tail = snake.tail();
+        List<Piece> snakePieces = snake.getPieces();
+        Piece tail = snake.getTail();
         path.moveTo(translateToBoard(tail.x), translateToBoard(tail.y));            
 
         for (int s = 1; s < snakePieces.size(); s++) {

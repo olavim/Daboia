@@ -8,22 +8,22 @@ import java.util.Objects;
 
 public class Player {
     
-    private final int id;
+    private final int id;    
+    private final String name;
     
-    private String name;
     private Snake snake;
     private DaboiaLogic logicHandler;
     private Color snakeColor;
     private boolean isDead;
-    private boolean presenceRemains;
+    private boolean shouldBeDrawn;
     
     public Player(int initialX, int initialY, int id, String name) {
         this.snake = new Snake(initialX, initialY);
         this.id = id;        
         this.isDead = false;
-        this.presenceRemains = true;
         this.snakeColor = new RandomColor(Color.WHITE).nextColor();
         this.name = name;
+        this.shouldBeDrawn = true;
     }
     
     public String getName() {
@@ -46,7 +46,7 @@ public class Player {
     public void setPosition(int x, int y) {
         
         /* Setting position not allowed after game has started */
-        if (this.snake.trueLength() > 1) {
+        if (this.snake.getTrueLength() > 1) {
         
             /* The snake's true length (the amount of pieces it consists of)
              * can never be 1 or less if it has moved at least once.
@@ -65,7 +65,7 @@ public class Player {
         return this.id;
     }
     
-    public Snake snake() {
+    public Snake getSnake() {
         return this.snake;
     }
     
@@ -73,16 +73,16 @@ public class Player {
         return this.isDead;
     }
     
-    public boolean presenceRemains() {
-        return this.presenceRemains;
-    }
-    
-    public void exorcise() {
-        this.presenceRemains = false;
-    }
-    
     public void kill() {
         this.isDead = true;
+    }
+    
+    public void doNotDraw() {
+        this.shouldBeDrawn = false;
+    }
+    
+    public boolean shouldBeDrawn() {
+        return this.shouldBeDrawn;
     }
 
     @Override

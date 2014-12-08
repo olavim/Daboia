@@ -7,14 +7,11 @@ import java.util.List;
 public class Snake {
     
     private List<Piece> pieces;
-    private boolean grow;
     private int length;
     
     public Snake(int x, int y) {        
         pieces = new ArrayList<>();
         pieces.add(new Piece(x, y));
-        
-        this.grow = true;
         this.length = 3;
     }
     
@@ -22,21 +19,21 @@ public class Snake {
         pieces = new ArrayList<>();        
     }
     
-    public List<Piece> pieces() {
+    public List<Piece> getPieces() {
         return new ArrayList<>(this.pieces);
     }
     
-    public Piece head() {
+    public Piece getHead() {
         return pieces.get(pieces.size() - 1);
     }
     
-    public Piece tail() {
+    public Piece getTail() {
         return pieces.get(0);
     }
     
     public void move(Direction direction) {
-        int px = head().x + direction.xTransform();
-        int py = head().y + direction.yTransform();
+        int px = getHead().x + direction.xTransform();
+        int py = getHead().y + direction.yTransform();
         pieces.add(new Piece(px, py));
         
         if (this.pieces.size() > this.length) {
@@ -48,13 +45,9 @@ public class Snake {
         this.length++;
     }
     
-    public boolean collidesWith(Piece otherPiece) {
-        for (Piece piece : this.pieces) {
-            if (piece == otherPiece) {
-                continue;
-            }
-            
-            if (piece.equals(otherPiece)) {
+    public boolean doesCollideWith(Piece otherPiece) {
+        for (Piece piece : this.pieces) {            
+            if (piece != otherPiece && piece.equals(otherPiece)) {
                 return true;
             }
         }
@@ -62,8 +55,22 @@ public class Snake {
         return false;
     }
     
-    public boolean collidesWithItself() {
-        return collidesWith(head());
+    public boolean doesCollideWith(Snake otherSnake) {
+        if (otherSnake == this) {
+            return this.doesCollideWithItself();
+        }
+        
+        for (Piece piece : otherSnake.getPieces()) {
+            if (this.doesCollideWith(piece)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean doesCollideWithItself() {
+        return doesCollideWith(getHead());
     }
     
     public void setPieces(List<Piece> pieces) {
@@ -76,11 +83,23 @@ public class Snake {
         return snakeCopy;
     }
     
-    public int length() {
+    /**
+     * The potential length of the snake.
+     * 
+     * @return  The amount of pieces the snake will consist of after X moves,
+     *          or in other words, the amount of apples the snake has eaten in
+     *          default gametypes.
+     */
+    public int getLength() {
         return this.length;
     }
     
-    public int trueLength() {
+    /**
+     * The visible length of the snake.
+     * 
+     * @return  The amount of pieces the snake consists of.
+     */
+    public int getTrueLength() {
         return this.pieces.size();
     }
 

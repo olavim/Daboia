@@ -29,7 +29,7 @@ public class SelectLogicListener extends MouseAdapter {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        try {
+//        try {
             ComponentList componentList = new LabelList();
             componentList.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
             componentList.addObjects(PluginManager.getLogicHandlers());
@@ -38,14 +38,10 @@ public class SelectLogicListener extends MouseAdapter {
             DaboiaLogic logicHandler = (DaboiaLogic) chooser.showDialog();
             
             if (logicHandler != null) {
-                DaboiaLogic logicHandlerInstance = logicHandler.getClass().newInstance();
-                logicHandlerInstance.setTitle(logicHandler.title());
-                player.setLogicHandler(logicHandlerInstance);
+                logicHandler = logicHandler.clone();
+                player.setLogicHandler(logicHandler);
                 list.refresh();
             }
-        } catch (InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(SelectLogicListener.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

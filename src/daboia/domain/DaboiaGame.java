@@ -11,7 +11,7 @@ public class DaboiaGame {
     
     private final List<Player> players;
     
-    private int[][] board;    
+    private int[][] board;
     private Piece apple;
     private boolean gameOver;    
     private int numPlayersAlive;
@@ -81,25 +81,28 @@ public class DaboiaGame {
     }
     
     public void makeMove(Player player, Direction direction) {
-        Snake snake = player.snake();
+        Snake snake = player.getSnake();
         
         snake.move(direction);
         this.numMovesNotEaten++;
         
-        if (snake.collidesWith(apple)) {
+        if (snake.doesCollideWith(apple)) {
             snake.grow();
             this.placeApple();
             this.numMovesNotEaten = 0;
         }
         
-        refreshBoard();
-        
         if (playerIsDead(player)) {
             handlePlayerDeath(player);
         }
         
-        if (this.isInfiniteGame() || this.freeSpots() == 0 || this.numPlayersAlive == 0) {
+        if (this.isInfiniteGame() || this.freeSpots() == 0 || this.numPlayersAlive == 0
+                || (this.numPlayers() > 1 && this.numPlayersAlive < 2)) {
             this.gameOver = true;
+        }
+        
+        if (!this.gameOver) {
+            refreshBoard();
         }
     }
     
@@ -118,13 +121,17 @@ public class DaboiaGame {
         this.board = new int[height()][width()];
         
         for (Player player : this.players) {
-            Snake snake = player.snake();
+            if (player.isDead()) {
+                continue;
+            }
             
-            for (Piece piece : snake.pieces()) {
+            Snake snake = player.getSnake();
+            
+            for (Piece piece : snake.getPieces()) {
                 board[piece.y][piece.x] = -1;
             }
             
-            board[snake.head().y][snake.head().x] = -2;
+            board[snake.getHead().y][snake.getHead().x] = -2;
         }
         
         if (apple != null) {
@@ -133,23 +140,30 @@ public class DaboiaGame {
     }
     
     private void handlePlayerDeath(Player player) {
-        System.out.println("Player " + (player.getID() + 1) + " died with snake length " + player.snake().length());
+        System.out.println("Player " + (player.getID() + 1) + " died with snake length " + player.getSnake().getLength());
 
         player.kill();
         numPlayersAlive--;
+        
+        if (this.numPlayers() > 1 && numPlayersAlive > 1) {
+            player.doNotDraw();
+        }
     }
     
     private boolean playerIsDead(Player player) {        
-        Snake snake = player.snake();
-        int x = snake.head().x;
-        int y = snake.head().y;
+        Snake snake = player.getSnake();
+        int x = snake.getHead().x;
+        int y = snake.getHead().y;
         if (x < 0 || x >= this.width() || y < 0 || y >= this.height()) {
             return true;
         }
         
-        if (snake.collidesWithItself()) {
-            return true;
-        }        
+        /* also checks for collision with itself */
+        for (Player otherPlayer : this.players) {
+            if (snake.doesCollideWith(otherPlayer.getSnake())) {
+                return true;
+            }
+        }    
         
         return false;
     }
@@ -168,7 +182,7 @@ public class DaboiaGame {
         }
         
         for (Player player : this.players) {
-            allowedPoints.removeAll(player.snake().pieces());
+            allowedPoints.removeAll(player.getSnake().getPieces());
         }
         
         Collections.shuffle(allowedPoints);
@@ -178,7 +192,7 @@ public class DaboiaGame {
     private int freeSpots() {
         int freeSpots = this.width() * this.height();
         for (Player player : this.players) {
-            freeSpots -= player.snake().trueLength();
+            freeSpots -= player.getSnake().getTrueLength();
         }
         
         return freeSpots;
