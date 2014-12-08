@@ -13,6 +13,11 @@ public class Piece {
         this.y = y;
     }
     
+    public Piece(Piece piece) {
+        this.x = piece.x;
+        this.y = piece.y;
+    }
+    
     public Point asPoint() {
         return new Point(x, y);
     }

@@ -90,7 +90,7 @@ public class GameHandler {
         }
     }
     
-    public void startGame(int speed) {        
+    public void startGame(int speed) {
         gameInterface.showWindow();
         Runnable moveCmd = () -> {
             try {
@@ -109,7 +109,7 @@ public class GameHandler {
                 gameInterface.getFrame().repaint();
                 daboiaGame.wait(speed);
 
-                if (daboiaGame.gameOver()) {
+                if (daboiaGame.isGameOver()) {
                     stopGame();
                 }
                 

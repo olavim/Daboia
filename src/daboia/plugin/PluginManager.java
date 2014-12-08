@@ -26,7 +26,7 @@ public class PluginManager {
         String title = plugin.second.getValue(Attributes.Name.SPECIFICATION_TITLE);
         logicHandler.setTitle(title);
         
-        if (logicHandler.title() == null || logicHandler.title().isEmpty()) {
+        if (logicHandler.getTitle() == null || logicHandler.getTitle().isEmpty()) {
             String canonicalName = logicHandler.getClass().getCanonicalName();
             int lastDot = canonicalName.lastIndexOf(".");
             logicHandler.setTitle(canonicalName.substring(lastDot + 1));

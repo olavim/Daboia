@@ -91,7 +91,7 @@ public class PlayerList extends LabelList<Player> {
             Color logicLabelColor = PlayerList.this.getForeground().brighter().brighter();
             String text = "No logic";
             if (player.getLogicHandler() != null) {
-                text = player.getLogicHandler().title();
+                text = player.getLogicHandler().getTitle();
                 logicLabelColor = PlayerList.this.getForeground().brighter();
             }
             

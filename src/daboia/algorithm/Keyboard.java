@@ -17,7 +17,7 @@ public class Keyboard extends DaboiaLogic {
     
     @Override
     public String getMove() {
-        char lastKey = lastKeyTyped();
+        char lastKey = getLastKeyTyped();
         
         if     (lastKey == keys[0] && !isNeck(0, -1)) move = "UP";
         else if(lastKey == keys[1] && !isNeck(-1, 0)) move = "LEFT";
@@ -28,8 +28,8 @@ public class Keyboard extends DaboiaLogic {
     }
     
     private boolean isNeck(int dirX, int dirY) {
-        Piece snakeHead = player().getSnake().getHead();
-        Piece neck = player().getSnake().getPieces().get(player().getSnake().getLength() - 2);
+        Piece snakeHead = getPlayer().getSnake().getHead();
+        Piece neck = getPlayer().getSnake().getPieces().get(getPlayer().getSnake().getLength() - 2);
         
         return snakeHead.x + dirX == neck.x && snakeHead.y + dirY == neck.y;
     }

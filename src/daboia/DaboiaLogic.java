@@ -42,40 +42,40 @@ public abstract class DaboiaLogic implements Cloneable {
         this.onLaunch();
     }
     
-    public void setDaboiaGame(DaboiaGame daboiaGame) {
+    public final void setDaboiaGame(DaboiaGame daboiaGame) {
         this.daboiaGame = daboiaGame;
     }
     
-    public void setPlayer(Player player) {
+    public final void setPlayer(Player player) {
         this.player = player;
     }
     
-    public void sendKey(char c) {
+    public final void sendKey(char c) {
         this.lastKeyTyped = c;
     }
     
-    public String title() {
+    public final String getTitle() {
         return this.title;
     }
     
-    public void setTitle(String title) {
+    public final void setTitle(String title) {
         this.title = title;
     }
     
-    protected DaboiaGame daboiaGame() {
+    public final DaboiaGame getGameInstance() {
         return this.daboiaGame;
     }
     
-    protected Player player() {
+    public final Player getPlayer() {
         return this.player;
     }
     
-    protected char lastKeyTyped() {
+    public final char getLastKeyTyped() {
         return this.lastKeyTyped;
     }
     
     @Override
-    public DaboiaLogic clone() {
+    public final DaboiaLogic clone() {
         try {
             return (DaboiaLogic) super.clone();
         } catch (CloneNotSupportedException ex) {
@@ -84,7 +84,7 @@ public abstract class DaboiaLogic implements Cloneable {
     }
     
     @Override
-    public String toString() {
+    public final String toString() {
         return this.title;
     }
     

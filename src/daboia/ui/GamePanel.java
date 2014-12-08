@@ -53,7 +53,7 @@ public class GamePanel extends JPanel {
             g2.drawLine(hx, hy, hx, hy);
         }
         
-        Piece apple = daboiaGame.apple();
+        Piece apple = daboiaGame.getApple();
         if (apple != null) {
             int ax = translateToBoard(apple.x);
             int ay = translateToBoard(apple.y);
@@ -83,7 +83,7 @@ public class GamePanel extends JPanel {
     
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(daboiaGame.width() * squareSize + padding * 2, daboiaGame.height() * squareSize + padding * 2);
+        return new Dimension(daboiaGame.getBoard().getWidth() * squareSize + padding * 2, daboiaGame.getBoard().getHeight() * squareSize + padding * 2);
     }
     
     @Override

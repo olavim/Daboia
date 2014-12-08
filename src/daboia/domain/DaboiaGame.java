@@ -1,7 +1,6 @@
 
 package daboia.domain;
 
-import daboia.DaboiaLogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,38 +10,23 @@ public class DaboiaGame {
     
     private final List<Player> players;
     
-    private int[][] board;
-    private Piece apple;
+//    private int[][] board;
+    private Board board;
     private boolean gameOver;    
     private int numPlayersAlive;
     private int numMovesNotEaten;
     
     public DaboiaGame(Collection<Player> players, int width, int height) {
         this.players = new ArrayList<>(players);
-        this.apple = new Piece(width/2, height/2);
         this.gameOver = false;
-        this.board = new int[height][width];
+//        this.board = new int[height][width];
+        this.board = new Board(width, height);
         this.numPlayersAlive = players.size();
         this.numMovesNotEaten = 0;
-        
-        this.board[height - 2][1] = -2;
-        this.board[apple.y][apple.x] = 8;
     }
     
     public int numPlayers() {
         return this.players.size();
-    }
-    
-    public Player getPlayer(int playerID) {
-        if (playerID >= players.size()) {
-            return null;
-        }
-        
-        return players.get(playerID);
-    }
-    
-    public DaboiaLogic getLogicHandler(int playerID) {
-        return this.players.get(playerID).getLogicHandler();
     }
     
     public void sendKeyInput(char c) {
@@ -55,40 +39,38 @@ public class DaboiaGame {
         return new ArrayList<>(players);
     }
     
-    public int width() {
-        return this.board[0].length;
+    public Piece getApple() {
+        return this.board.getApple();
     }
     
-    public int height() {
-        return this.board.length;
+    public Board getBoard() {
+        return this.board.getCopy();
     }
     
-    public Piece apple() {
-        return this.apple;
-    }
-    
-    public int[][] board() {
-        int[][] boardCopy = new int[height()][width()];
-        for (int i = 0; i < boardCopy.length; i++) {
-            System.arraycopy(board[i], 0, boardCopy[i], 0, boardCopy[0].length);
-        }
-        
-        return boardCopy;
-    }
-    
-    public boolean gameOver() {
+    public boolean isGameOver() {
         return this.gameOver;
     }
     
     public void makeMove(Player player, Direction direction) {
         Snake snake = player.getSnake();
         
+        Piece previousHead = snake.getHead(); 
+        Piece previousTail = snake.getTail();
+        
         snake.move(direction);
         this.numMovesNotEaten++;
         
-        if (snake.doesCollideWith(apple)) {
+        Piece currentHead = snake.getHead();
+        Piece currentTail = snake.getTail();
+        
+        this.board.set(previousHead.x, previousHead.y, Board.SNAKE_BODY);
+        this.board.set(previousTail.x, previousTail.y, Board.FLOOR);
+        this.board.set(currentHead.x, currentHead.y, Board.SNAKE_HEAD);
+        this.board.set(currentTail.x, currentTail.y, Board.SNAKE_BODY);
+        
+        if (snake.doesCollideWith(this.getApple())) {
             snake.grow();
-            this.placeApple();
+            this.board.placeApple();
             this.numMovesNotEaten = 0;
         }
         
@@ -96,13 +78,9 @@ public class DaboiaGame {
             handlePlayerDeath(player);
         }
         
-        if (this.isInfiniteGame() || this.freeSpots() == 0 || this.numPlayersAlive == 0
+        if (this.isInfiniteGame() || this.numFreeSpots() == 0 || this.numPlayersAlive == 0
                 || (this.numPlayers() > 1 && this.numPlayersAlive < 2)) {
             this.gameOver = true;
-        }
-        
-        if (!this.gameOver) {
-            refreshBoard();
         }
     }
     
@@ -113,30 +91,8 @@ public class DaboiaGame {
      * @return   True or false.
      */
     public boolean isInfiniteGame() {
-        int area = this.width() * this.height();
+        int area = this.board.getWidth() * this.board.getHeight();
         return this.numMovesNotEaten > this.numPlayersAlive * area * 3;
-    }
-    
-    private void refreshBoard() {
-        this.board = new int[height()][width()];
-        
-        for (Player player : this.players) {
-            if (player.isDead()) {
-                continue;
-            }
-            
-            Snake snake = player.getSnake();
-            
-            for (Piece piece : snake.getPieces()) {
-                board[piece.y][piece.x] = -1;
-            }
-            
-            board[snake.getHead().y][snake.getHead().x] = -2;
-        }
-        
-        if (apple != null) {
-            board[apple.y][apple.x] = 8;
-        }
     }
     
     private void handlePlayerDeath(Player player) {
@@ -144,6 +100,10 @@ public class DaboiaGame {
 
         player.kill();
         numPlayersAlive--;
+        
+        for (Piece piece : player.getSnake().getPieces()) {
+            this.board.set(piece.x, piece.y, Board.FLOOR);
+        }
         
         if (this.numPlayers() > 1 && numPlayersAlive > 1) {
             player.doNotDraw();
@@ -154,7 +114,8 @@ public class DaboiaGame {
         Snake snake = player.getSnake();
         int x = snake.getHead().x;
         int y = snake.getHead().y;
-        if (x < 0 || x >= this.width() || y < 0 || y >= this.height()) {
+        if (x < 0 || x >= this.board.getWidth()
+                || y < 0 || y >= this.board.getHeight()) {
             return true;
         }
         
@@ -168,29 +129,8 @@ public class DaboiaGame {
         return false;
     }
     
-    private void placeApple() {
-        if (freeSpots() == 0) {
-            this.apple = null;
-            return;
-        }
-        
-        List<Piece> allowedPoints = new ArrayList<>();
-        for (int y = 0; y < height(); y++) {
-            for (int x = 0; x < width(); x++) {
-                allowedPoints.add(new Piece(x, y));
-            }
-        }
-        
-        for (Player player : this.players) {
-            allowedPoints.removeAll(player.getSnake().getPieces());
-        }
-        
-        Collections.shuffle(allowedPoints);
-        this.apple = allowedPoints.get(0);
-    }
-    
-    private int freeSpots() {
-        int freeSpots = this.width() * this.height();
+    private int numFreeSpots() {
+        int freeSpots = this.board.getWidth() * this.board.getHeight();
         for (Player player : this.players) {
             freeSpots -= player.getSnake().getTrueLength();
         }

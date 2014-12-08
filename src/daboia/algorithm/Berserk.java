@@ -16,7 +16,7 @@ public class Berserk extends DaboiaLogic {
     @Override
     public String getMove() { 
         
-        Piece apple = daboiaGame().apple();
+        Piece apple = getGameInstance().getApple();
         
         // Koitetaan syödä apple
         String move = nextMove(apple.x, apple.y);
@@ -53,8 +53,8 @@ public class Berserk extends DaboiaLogic {
             return false;
         }
         
-        int[][] board = daboiaGame().board();
-        Piece snakeHead = player().getSnake().getHead();
+        byte[][] board = getGameInstance().getBoard().getCore();
+        Piece snakeHead = getPlayer().getSnake().getHead();
         
         int x = 0;
         int y = 0;
@@ -70,19 +70,19 @@ public class Berserk extends DaboiaLogic {
         boolean canMove = SnakeLogicUtils.canMove(board, x, y);
         int possibilities = SnakeLogicUtils.possibilities(board, x, y, new ArrayList<>());
         
-        return canMove && possibilities > player().getSnake().getLength() + 20;
+        return canMove && possibilities > getPlayer().getSnake().getLength() + 20;
     }
     
     // Seuraava best move A* -algoritmilla
     public String nextMove(int goalX, int goalY) {
-        int[][] board = daboiaGame().board();
+        byte[][] board = getGameInstance().getBoard().getCore();
         
         PriorityQueue<Location> queue = new PriorityQueue<>();        
         ArrayList<Location> visited = new ArrayList<>();
         Location location;
 {
-        int headX = player().getSnake().getHead().x;
-        int headY = player().getSnake().getHead().y;
+        int headX = getPlayer().getSnake().getHead().x;
+        int headY = getPlayer().getSnake().getHead().y;
         int score = SnakeLogicUtils.calculateScore(headX, goalX, headY, goalY);
         location = new Location(headX, headY, score, new ArrayList<>());
 }        
@@ -121,9 +121,9 @@ public class Berserk extends DaboiaLogic {
     
     // Valitsee siirron, josta seuraa mahdollisimman paljon liikkumavaraa
     private String stall() {
-        int[][] board = daboiaGame().board();
+        byte[][] board = getGameInstance().getBoard().getCore();
         
-        Piece snakeHead = player().getSnake().getHead();
+        Piece snakeHead = getPlayer().getSnake().getHead();
         
         int max = 0;
         int bestIndex = -1;
@@ -227,7 +227,7 @@ class SnakeLogicUtils {
     }
     
     // Rekursiivinen dfs; kuinka moneen ruutuun *tästä* ruudusta voi päästä
-    public static int possibilities(int[][] board, int x, int y, ArrayList<Point> visited) {
+    public static int possibilities(byte[][] board, int x, int y, ArrayList<Point> visited) {
         if (!canMove(board, x, y) || visited.contains(new Point(x, y))) {
             return 0;
         }
@@ -244,7 +244,7 @@ class SnakeLogicUtils {
     }
     
     // Tarkastaa onko ruutu tyhjä tai omena
-    public static boolean canMove(int[][] board, int x, int y) {
+    public static boolean canMove(byte[][] board, int x, int y) {
         if (x < 0 || x >= board[0].length || y < 0 || y >= board.length) {
             return false;
         }

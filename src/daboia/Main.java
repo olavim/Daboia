@@ -5,6 +5,7 @@ import daboia.domain.GameSettings;
 import daboia.domain.Player;
 import daboia.ui.MainInterface;
 import daboia.plugin.PluginManager;
+import java.awt.Point;
 import java.io.IOException;
 import java.util.Collection;
 
