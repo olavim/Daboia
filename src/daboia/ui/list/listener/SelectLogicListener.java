@@ -12,8 +12,6 @@ import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
         
 public class SelectLogicListener extends MouseAdapter {
     

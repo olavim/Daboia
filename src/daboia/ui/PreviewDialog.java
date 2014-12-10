@@ -4,7 +4,7 @@ package daboia.ui;
 import daboia.DaboiaLogic;
 import daboia.ui.list.PlayerList;
 import daboia.action.AddPlayerAction;
-import daboia.domain.GameSettings;
+import daboia.domain.game.GameSettings;
 import daboia.domain.Player;
 import daboia.domain.PlayerFactory;
 import daboia.error.ErrorDialog;

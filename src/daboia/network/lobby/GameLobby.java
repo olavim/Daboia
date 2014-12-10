@@ -2,15 +2,15 @@
 package daboia.network.lobby;
 
 import daboia.Main;
-import daboia.ui.GameLobbyInterface;
-import daboia.ui.UserInterface;
+import daboia.ui.GameLobbyWindow;
+import daboia.ui.GUI;
 import daboia.network.ConnectionState;
 import daboia.network.identity.LobbyIdentitySupplier;
 import java.io.IOException;
 import javax.swing.SwingUtilities;
 
 public class GameLobby extends Lobby {    
-    private UserInterface lobbyInterface;
+    private GUI lobbyInterface;
     private GameLobbyConnection connection;
 
     protected GameLobby(String serverAddress, int portNumber) {
@@ -40,7 +40,7 @@ public class GameLobby extends Lobby {
 
     @Override
     public void show() {
-        lobbyInterface = new GameLobbyInterface();
+        lobbyInterface = new GameLobbyWindow();
         SwingUtilities.invokeLater(lobbyInterface);
     }
 

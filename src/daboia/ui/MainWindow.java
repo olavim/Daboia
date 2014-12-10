@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.Container;
 import java.net.URL;
 
-public class MainInterface implements UserInterface {
+public class MainWindow implements GUI {
     
     private static final Color backgroundColor = new Color(60, 60, 60);
     
@@ -33,6 +33,11 @@ public class MainInterface implements UserInterface {
     @Override
     public void showWindow() {
         SwingUtilities.invokeLater(this);
+    }
+    
+    @Override
+    public void closeWindow() {
+        this.frame.dispose();
     }
     
     @Override

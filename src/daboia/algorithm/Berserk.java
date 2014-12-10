@@ -53,7 +53,7 @@ public class Berserk extends DaboiaLogic {
             return false;
         }
         
-        byte[][] board = getGameInstance().getBoard().getCore();
+        int[][] board = getGameInstance().getBoard();
         Piece snakeHead = getPlayer().getSnake().getHead();
         
         int x = 0;
@@ -75,7 +75,7 @@ public class Berserk extends DaboiaLogic {
     
     // Seuraava best move A* -algoritmilla
     public String nextMove(int goalX, int goalY) {
-        byte[][] board = getGameInstance().getBoard().getCore();
+        int[][] board = getGameInstance().getBoard();
         
         PriorityQueue<Location> queue = new PriorityQueue<>();        
         ArrayList<Location> visited = new ArrayList<>();
@@ -121,7 +121,7 @@ public class Berserk extends DaboiaLogic {
     
     // Valitsee siirron, josta seuraa mahdollisimman paljon liikkumavaraa
     private String stall() {
-        byte[][] board = getGameInstance().getBoard().getCore();
+        int[][] board = getGameInstance().getBoard();
         
         Piece snakeHead = getPlayer().getSnake().getHead();
         
@@ -227,7 +227,7 @@ class SnakeLogicUtils {
     }
     
     // Rekursiivinen dfs; kuinka moneen ruutuun *tästä* ruudusta voi päästä
-    public static int possibilities(byte[][] board, int x, int y, ArrayList<Point> visited) {
+    public static int possibilities(int[][] board, int x, int y, ArrayList<Point> visited) {
         if (!canMove(board, x, y) || visited.contains(new Point(x, y))) {
             return 0;
         }
@@ -244,7 +244,7 @@ class SnakeLogicUtils {
     }
     
     // Tarkastaa onko ruutu tyhjä tai omena
-    public static boolean canMove(byte[][] board, int x, int y) {
+    public static boolean canMove(int[][] board, int x, int y) {
         if (x < 0 || x >= board[0].length || y < 0 || y >= board.length) {
             return false;
         }

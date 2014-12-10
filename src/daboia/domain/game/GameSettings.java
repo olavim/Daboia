@@ -1,16 +1,17 @@
 
-package daboia.domain;
+package daboia.domain.game;
 
-import java.util.Collection;
+import daboia.domain.Player;
+import java.util.List;
 
 public class GameSettings {
     
-    private final Collection<Player> players;
+    private final List<Player> players;
     private final int width;
     private final int height;
     private final int framerate;
         
-    public GameSettings(Collection<Player> players, int width, int height, int speed) {
+    public GameSettings(List<Player> players, int width, int height, int speed) {
         String error = validateSettings(players, width, height, speed);
         if (error != null) {
             throw new IllegalArgumentException(error);
@@ -22,7 +23,7 @@ public class GameSettings {
         this.framerate = this.calculateGameSpeed(speed);
     }
     
-    private String validateSettings(Collection<Player> players, int width, int height, int speed) {        
+    private String validateSettings(List<Player> players, int width, int height, int speed) {        
         if (players.isEmpty()) {
             return "No players specified";
         } else if (players.size() > 6) {
@@ -39,10 +40,14 @@ public class GameSettings {
             }
         }
         
+        if (speed < 0 || speed > 100) {
+            return "Speed must be between 0 and 100";
+        }
+        
         return null;
     }
 
-    public Collection<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return this.players;
     }
     

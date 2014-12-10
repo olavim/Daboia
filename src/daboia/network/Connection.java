@@ -32,7 +32,9 @@ public abstract class Connection implements Closeable {
     
     /**
      * Start receiving and sending messages - communicating - with the server
-     * @throws IOException 
+     * 
+     * @throws IOException  Implementations of this method are assumed to read
+     * from and/or write to input/output streams, and throw an IOException if it failed.
      */
     public abstract void communicate() throws IOException;
     

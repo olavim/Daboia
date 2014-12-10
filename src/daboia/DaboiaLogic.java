@@ -1,28 +1,22 @@
 package daboia;
  
-import daboia.domain.DaboiaGame;
-import daboia.domain.GameSettings;
+import daboia.domain.game.DaboiaGame;
+import daboia.domain.game.GameSettings;
 import daboia.domain.Player;
 import daboia.util.ClassUtils;
 import java.util.Arrays;
 
-public abstract class DaboiaLogic implements Cloneable {    
-    protected static final int APPLE     = 8;
-    protected static final int FLOOR     = 0;
-    protected static final int OBSTACLE  = -1;
-    protected static final int UNDEFINED = -2;
+public abstract class DaboiaLogic implements Cloneable {
     
-    protected static <E extends DaboiaLogic> void launchPreview(Class<E> clazz, int speed, int width, int height) 
-            throws InstantiationException, IllegalAccessException {
-        
-        E logicHandler = ClassUtils.getClassInstance(clazz);
+    protected static void launchPreview(Class<DaboiaLogic> clazz, int width, int height, int speed) {
+        DaboiaLogic logicHandler = ClassUtils.getClassInstance(clazz);
         Player player = new Player(1, 1, 0, "Player");
         player.setLogicHandler(logicHandler);
-        GameSettings settings = new GameSettings(Arrays.asList(player), speed, width, height);
+        GameSettings settings = new GameSettings(Arrays.asList(player), width, height, speed);
         Main.launchPreview(settings);
     }
     
-    private DaboiaGame daboiaGame;    
+    private DaboiaGame daboiaGame;
     private Player player;
     
     private char lastKeyTyped;

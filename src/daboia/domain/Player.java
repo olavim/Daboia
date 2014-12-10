@@ -10,6 +10,8 @@ public class Player {
     
     private final int id;    
     private final String name;
+    private final int initialX;
+    private final int initialY;
     
     private Snake snake;
     private DaboiaLogic logicHandler;
@@ -19,11 +21,19 @@ public class Player {
     
     public Player(int initialX, int initialY, int id, String name) {
         this.snake = new Snake(initialX, initialY);
-        this.id = id;        
+        this.id = id;
+        this.initialX = initialX;
+        this.initialY = initialY;
         this.isDead = false;
         this.snakeColor = new RandomColor(Color.WHITE).nextColor();
         this.name = name;
         this.shouldBeDrawn = true;
+    }
+    
+    public void reset() {
+        this.snake = new Snake(initialX, initialY);
+        this.shouldBeDrawn = true;
+        this.isDead = false;
     }
     
     public String getName() {
@@ -84,6 +94,11 @@ public class Player {
     public boolean shouldBeDrawn() {
         return this.shouldBeDrawn;
     }
+    
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -97,7 +112,7 @@ public class Player {
         if (this.id != other.id) {
             return false;
         }
-        return Objects.equals(this.name, other.name);
+        return this.name.equals(other.name);
     }
 
     @Override

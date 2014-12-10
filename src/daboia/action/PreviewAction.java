@@ -2,7 +2,7 @@
 package daboia.action;
 
 import daboia.Main;
-import daboia.domain.GameSettings;
+import daboia.domain.game.GameSettings;
 import daboia.ui.PreviewDialog;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;

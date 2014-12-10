@@ -45,7 +45,7 @@ public class Snake {
         this.length++;
     }
     
-    public boolean doesCollideWith(Piece otherPiece) {
+    public boolean collidesWith(Piece otherPiece) {
         for (Piece piece : this.pieces) {            
             if (piece != otherPiece && piece.equals(otherPiece)) {
                 return true;
@@ -55,13 +55,13 @@ public class Snake {
         return false;
     }
     
-    public boolean doesCollideWith(Snake otherSnake) {
+    public boolean collidesWith(Snake otherSnake) {
         if (otherSnake == this) {
             return this.doesCollideWithItself();
         }
         
         for (Piece piece : otherSnake.getPieces()) {
-            if (this.doesCollideWith(piece)) {
+            if (this.collidesWith(piece)) {
                 return true;
             }
         }
@@ -70,7 +70,7 @@ public class Snake {
     }
     
     public boolean doesCollideWithItself() {
-        return doesCollideWith(getHead());
+        return Snake.this.collidesWith(getHead());
     }
     
     public void setPieces(List<Piece> pieces) {
@@ -101,6 +101,11 @@ public class Snake {
      */
     public int getTrueLength() {
         return this.pieces.size();
+    }
+    
+    @Override
+    public String toString() {
+        return "length: " + this.length + "\nhead: " + this.getHead();
     }
 
 }

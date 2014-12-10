@@ -1,10 +1,9 @@
 
 package daboia.ui;
 
+import daboia.domain.game.GameHandler;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
-import daboia.domain.DaboiaGame;
-import daboia.GameHandler;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.KeyAdapter;
@@ -12,26 +11,31 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
 
-public class GameInterface implements UserInterface {
+public class GameWindow implements GUI {
 
     private final static Color background = new Color(40, 40, 40);
     
     private JFrame frame;
-    private DaboiaGame daboiaGame;
+    private GameHandler gameHandler;
     
-    public GameInterface(DaboiaGame daboiaGame) {
-        this.daboiaGame = daboiaGame;
+    public GameWindow(GameHandler handler) {
+        this.gameHandler = handler;
     }
     
     @Override
     public void showWindow() {
         SwingUtilities.invokeLater(this);
     }
+    
+    @Override
+    public void closeWindow() {
+        this.frame.dispose();
+    }
 
     @Override
     public void run() {
         frame = new JFrame("Daboia Game");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setBackground(background);
         
         addContents(frame.getContentPane());
@@ -47,8 +51,12 @@ public class GameInterface implements UserInterface {
         return frame;
     }
     
+    public void refresh() {
+        frame.repaint();
+    }
+    
     private void addContents(Container container) {
-        container.add(new GamePanel(daboiaGame));
+        container.add(new GamePanel(gameHandler.getRegisteredGame()));
     }
     
     private void addListeners(JFrame frame) {
@@ -56,14 +64,14 @@ public class GameInterface implements UserInterface {
             @Override
             public void windowClosing(WindowEvent e) {
                 // also disposes of the window
-                GameHandler.cleanSession(0);
+                gameHandler.stopGame(0);
             }
         });
         
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                daboiaGame.sendKeyInput(e.getKeyChar());
+                gameHandler.getRegisteredGame().sendKeyInput(e.getKeyChar());
             }
         });
     }

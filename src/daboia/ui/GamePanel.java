@@ -1,10 +1,10 @@
 
 package daboia.ui;
 
-import daboia.domain.DaboiaGame;
 import daboia.domain.Piece;
 import daboia.domain.Player;
 import daboia.domain.Snake;
+import daboia.domain.game.DaboiaGame;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 public class GamePanel extends JPanel {
     
-    private final static int snakeSize = 9;
+    private final static int pieceSize = 9;
     private final static int squareSize = 14;
     private final static int padding = 5;
     
@@ -33,6 +33,7 @@ public class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(pieceSize));        
         
         for (Player player : daboiaGame.getPlayers()) {
             if (!player.shouldBeDrawn()) {
@@ -42,7 +43,6 @@ public class GamePanel extends JPanel {
             Path2D path = getSnakePath(player.getSnake());
             
             g2.setColor(player.getSnakeColor());
-            g2.setStroke(new BasicStroke(snakeSize));
             g2.draw(path);
             
             Piece head = player.getSnake().getHead();
@@ -83,7 +83,7 @@ public class GamePanel extends JPanel {
     
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(daboiaGame.getBoard().getWidth() * squareSize + padding * 2, daboiaGame.getBoard().getHeight() * squareSize + padding * 2);
+        return new Dimension(daboiaGame.getWidth() * squareSize + padding * 2, daboiaGame.getHeight() * squareSize + padding * 2);
     }
     
     @Override

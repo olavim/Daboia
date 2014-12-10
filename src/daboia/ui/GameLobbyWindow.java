@@ -12,13 +12,18 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
 
-public class GameLobbyInterface implements UserInterface {
+public class GameLobbyWindow implements GUI {
     
     private JFrame frame;
     
     @Override
     public void showWindow() {
         SwingUtilities.invokeLater(this);
+    }
+    
+    @Override
+    public void closeWindow() {
+        this.frame.dispose();
     }
 
     @Override
