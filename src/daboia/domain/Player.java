@@ -16,7 +16,7 @@ public class Player {
     private Snake snake;
     private DaboiaLogic logicHandler;
     private Color snakeColor;
-    private boolean isDead;
+    private boolean isAlive;
     private boolean shouldBeDrawn;
     
     public Player(int initialX, int initialY, int id, String name) {
@@ -24,7 +24,7 @@ public class Player {
         this.id = id;
         this.initialX = initialX;
         this.initialY = initialY;
-        this.isDead = false;
+        this.isAlive = true;
         this.snakeColor = new RandomColor(Color.WHITE).nextColor();
         this.name = name;
         this.shouldBeDrawn = true;
@@ -33,7 +33,7 @@ public class Player {
     public void reset() {
         this.snake = new Snake(initialX, initialY);
         this.shouldBeDrawn = true;
-        this.isDead = false;
+        this.isAlive = true;
     }
     
     public String getName() {
@@ -79,19 +79,23 @@ public class Player {
         return this.snake;
     }
     
-    public boolean isDead() {
-        return this.isDead;
+    public void setSnake(Snake snake) {
+        this.snake = snake;
     }
     
-    public void kill() {
-        this.isDead = true;
+    public boolean isAlive() {
+        return this.isAlive;
     }
     
-    public void doNotDraw() {
-        this.shouldBeDrawn = false;
+    public void setIsAlive(boolean alive) {
+        this.isAlive = alive;
     }
     
-    public boolean shouldBeDrawn() {
+    public void setShouldBeDrawn(boolean draw) {
+        this.shouldBeDrawn = draw;
+    }
+    
+    public boolean getShouldBeDrawn() {
         return this.shouldBeDrawn;
     }
     

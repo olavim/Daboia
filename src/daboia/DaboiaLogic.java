@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public abstract class DaboiaLogic implements Cloneable {
     
-    protected static void launchPreview(Class<DaboiaLogic> clazz, int width, int height, int speed) {
+    protected static void launchPreview(Class<? extends DaboiaLogic> clazz, int width, int height, int speed) {
         DaboiaLogic logicHandler = ClassUtils.getClassInstance(clazz);
         Player player = new Player(1, 1, 0, "Player");
         player.setLogicHandler(logicHandler);

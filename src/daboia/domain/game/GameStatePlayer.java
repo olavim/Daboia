@@ -27,7 +27,6 @@ public class GameStatePlayer extends WindowedGameHandler {
         
         Runnable moveCmd = () -> {
             try {
-                refreshWindow();
                 if (game.nextState()) {
                     refreshWindow();
                 } else {

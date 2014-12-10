@@ -49,12 +49,12 @@ public class Tester extends DaboiaLogic {
     }
     
     private boolean canMove(int x, int y) {
-        if (x < 0 || x >= this.getGameInstance().getBoard().getWidth()
-                || y < 0 || y >= this.getGameInstance().getBoard().getHeight()) {
+        if (x < 0 || x >= this.getGameInstance().getWidth()
+                || y < 0 || y >= this.getGameInstance().getHeight()) {
             return false;
         }
         
-        byte[][] board = this.getGameInstance().getBoard().getCore();        
+        int[][] board = this.getGameInstance().getBoard();        
         return board[y][x] == 0 || board[y][x] == 8;
     }
     

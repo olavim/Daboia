@@ -27,26 +27,23 @@ public final class GamePreloader {
             logicHandler.init();
         }
 
-        int lastP = -1;
+        double lastP = -1;
         while (!game.isGameOver()) {
-            int percent = (100 * game.numPlayersAlive) / (game.numPlayers());
-//            System.out.println(game.width * game.height - game.numUnoccupied());
+            double percent = 1 - (double) game.numPlayersAlive / (double) game.numPlayers();
             if (percent > lastP) {
-                System.out.println(percent + "%... ");
+                System.out.println((int) (100 * percent) + "%... ");
                 lastP = percent;
             }
             
             for (Player player : game.getPlayers()) {
-                if (player.isDead()) {
-                    continue;
-                }
+                if (!player.isAlive()) continue;                
+                if (game.isGameOver()) break;
 
                 String directionStr = player.getLogicHandler().getMove();
                 Direction direction = Direction.directionFromString(directionStr);
                 game.makeMove(player, direction);
             }
         }
-        System.out.println("");
 
         game.rewind();
 

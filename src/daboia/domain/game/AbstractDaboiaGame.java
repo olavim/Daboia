@@ -27,7 +27,6 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
         this.numPlayersAlive = players.size();
         this.numMovesNotEaten = 0;
         this.board = new Board(width, height);
-        this.placeApples = true;
         
         for (Player player : players) {
             player.reset();
@@ -100,7 +99,7 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     private boolean playerCollidesWithSomeone(Player player) {
         /* also checks for collision with itself */
         for (Player otherPlayer : this.players) {
-            if (otherPlayer.isDead()) continue;
+            if (!otherPlayer.isAlive()) continue;
             
             if (player.getSnake().collidesWith(otherPlayer.getSnake())) {
                 return true;
@@ -110,7 +109,7 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
         return false;
     }
     
-    private void moveSnake(Snake snake, Direction direction) {
+    protected void moveSnake(Snake snake, Direction direction) {
         this.board.set(snake.getHead().x, snake.getHead().y, BoardConstants.SNAKE_BODY);
         this.board.set(snake.getTail().x, snake.getTail().y, BoardConstants.FLOOR);
         
@@ -121,7 +120,7 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
         this.board.set(snake.getTail().x, snake.getTail().y, BoardConstants.SNAKE_BODY);
     }
     
-    private void checkIfAppleEaten(Snake snake) {
+    protected void checkIfAppleEaten(Snake snake) {
         if (snake.collidesWith(this.getApple())) {
             snake.grow();
             this.placeApple();
@@ -135,8 +134,8 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
         }
     }
     
-    private void handlePlayerDeath(Player player) {
-        player.kill();
+    protected void handlePlayerDeath(Player player) {
+        player.setIsAlive(false);
         numPlayersAlive--;
         
         for (Piece piece : player.getSnake().getPieces()) {
@@ -144,7 +143,7 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
         }
         
         if (this.numPlayers() > 1 && numPlayersAlive > 1) {
-            player.doNotDraw();
+            player.setShouldBeDrawn(false);
         }
     }
 

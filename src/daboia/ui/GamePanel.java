@@ -36,7 +36,7 @@ public class GamePanel extends JPanel {
         g2.setStroke(new BasicStroke(pieceSize));        
         
         for (Player player : daboiaGame.getPlayers()) {
-            if (!player.shouldBeDrawn()) {
+            if (!player.getShouldBeDrawn()) {
                 continue;
             }
             

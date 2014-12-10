@@ -81,11 +81,11 @@ public class Board {
         this.core = new int[this.core.length][this.core[0].length];
         
         for (Player player : players) {
-            if (player.isDead()) {
+            if (!player.isAlive()) {
                 continue;
             }
             
-            for (Piece piece : player.getSnake().getPieces()) {
+            for (Piece piece : player.getSnake().getPieces()) {                
                 this.core[piece.y][piece.x] = BoardConstants.SNAKE_BODY;
             }
 

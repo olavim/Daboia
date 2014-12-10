@@ -3,6 +3,7 @@ package daboia.domain.game;
 
 import daboia.domain.Direction;
 import daboia.domain.Player;
+import daboia.domain.Snake;
 import java.util.List;
 
 public class SavedStateGame extends AbstractDaboiaGame {
@@ -12,7 +13,7 @@ public class SavedStateGame extends AbstractDaboiaGame {
     
     public SavedStateGame(List<Player> players, int width, int height) {
         super(players, width, height);
-        this.initialState = new GameState(1, this.getApple());
+        this.initialState = new GameState(null, this.getApple());
         this.currentState = this.initialState;
     }
     
@@ -20,10 +21,12 @@ public class SavedStateGame extends AbstractDaboiaGame {
     public void makeMove(Player player, Direction direction) {        
         super.makeMove(player, direction);
         
-        this.currentState.addDirection(player, direction);
-        if (this.currentState.numPlayers() >= this.numPlayersAlive) {
+        this.currentState.setAliveStatus(player, player.isAlive());
+        this.currentState.setShouldDrawStatus(player, player.getShouldBeDrawn());
+        this.currentState.setSnake(player, player.getSnake().copy());
+        
+        if (this.currentState.numPlayers() >= this.numPlayersAlive)
             this.startNextState();
-        }
     }
     
     /**
@@ -32,26 +35,25 @@ public class SavedStateGame extends AbstractDaboiaGame {
      * 
      * @return  true if there is a next state, otherwise false.
      */
-    public boolean nextState() {        
-        for (Player player : getPlayers()) {
-            if (this.currentState.getDirection(player) == null) {
-                continue;
-            }
-
-            Direction direction = this.currentState.getDirection(player);
-            super.makeMove(player, direction);
+    public boolean nextState() {
+        this.setApple(this.currentState.getApple());
+        
+        for (Player player : this.getPlayers()) {
+            boolean isAlive = this.currentState.getAliveStatus(player);
+            boolean shouldDraw = this.currentState.getShouldDrawStatus(player);
+            Snake snake = this.currentState.getSnake(player);
+            
+            player.setIsAlive(isAlive);
+            player.setShouldBeDrawn(shouldDraw);
+            player.setSnake(snake);
         }
         
         this.currentState = this.currentState.getNext();
-        if (this.currentState != null) {
-            this.setApple(this.currentState.getApple());
-        }
-        
         return this.currentState != null;
     }
     
     private void startNextState() {
-        GameState next = new GameState(currentState.getId() + 1, this.getApple());
+        GameState next = new GameState(currentState, this.getApple());
         currentState.setNext(next);
         currentState = next;
     }
