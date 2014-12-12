@@ -21,8 +21,11 @@ The current version will remain as 0.0.9 until fully functional local gameplay i
 
 - [x] Select an AI from a list that is populated by external .jar files that reside in ~~some appropriate~~ `logic/` folder. A .jar is recognized as an AI if it extends the abstract class `DaboiaLogic`.
 - [x] Aquire an adequate amount of visual satisfaction when opening the game.
-- [ ] Configure each game appropriately. This includes:
+- [x] Configure each game appropriately. This includes:
   - [x] Being able to add up to 6 players into a single game.
   - [x] Being able to configure the speed of the game.
   - [x] Being able to configure the size of the game area.
-  - [ ] Setup and launch the game according to these configurations.
+  - [x] Setup and launch the game according to these configurations.
+- [x] Preload each game.
+- [ ] Show the preloader's progress.
+- [ ] Examine the game back and forth. That is, after the game has been preloaded, it should be possible to play the game as a recording that can be rewinded, fast forwarded and paused at will.
