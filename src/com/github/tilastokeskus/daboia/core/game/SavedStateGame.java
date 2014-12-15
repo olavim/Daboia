@@ -4,12 +4,14 @@ package com.github.tilastokeskus.daboia.core.game;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Player;
 import com.github.tilastokeskus.daboia.core.Snake;
+import com.github.tilastokeskus.daboia.util.StateSaver;
 import java.util.List;
 
-public class SavedStateGame extends AbstractDaboiaGame {
+public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
     
-    private final GameState initialState;
+    private GameState initialState;
     private GameState currentState;
+    private GameState lastState;
     
     public SavedStateGame(List<Player> players, int width, int height) {
         super(players, width, height);
@@ -48,6 +50,7 @@ public class SavedStateGame extends AbstractDaboiaGame {
         GameState next = new GameState(currentState);
         currentState.setNext(next);
         currentState = next;
+        this.lastState = currentState;
     }
     
     /**
@@ -64,12 +67,23 @@ public class SavedStateGame extends AbstractDaboiaGame {
      * 
      * @return  true if there is a next state, otherwise false.
      */
+    @Override
     public boolean nextState() {
         this.setApple(this.currentState.getApple());        
         this.recallPlayerStates();
         
         this.currentState = this.currentState.getNext();
         return this.currentState != null;
+    }
+
+    @Override
+    public boolean previousState() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public int numStates() {
+        return this.lastState.getId();
     }
     
     /**
@@ -107,11 +121,13 @@ public class SavedStateGame extends AbstractDaboiaGame {
         this.currentState.setNext(null);
     }
     
-    public GameState getCurrentGameState() {
+    @Override
+    public GameState getCurrentState() {
         return this.currentState;
     }
     
-    public GameState getInitialGameState() {
+    @Override
+    public GameState getInitialState() {
         return this.initialState;
     }
     

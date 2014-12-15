@@ -28,7 +28,7 @@ public class JarClassLoader<T> {
                 System.out.println("No plugins found.");
             }
         } catch (MalformedURLException ex) {
-            System.out.println("Cannot load plugins: " + ex.getMessage());
+            System.err.println("Cannot load plugins: " + ex.getMessage());
         }
     }
     
@@ -43,17 +43,18 @@ public class JarClassLoader<T> {
         List<Pair<T, Attributes>> classList = new ArrayList<>();
         URLClassLoader classLoader = URLClassLoader.newInstance(urls);
         
-        for (URL url : urls) {        
+        for (URL url : urls) {
             try {
                 Attributes attr = getMainAttributes(url);
-                Class clazz = classLoader.loadClass(attr.getValue(Attributes.Name.MAIN_CLASS));
+                String mainClass = attr.getValue(Attributes.Name.MAIN_CLASS);
+                Class clazz = classLoader.loadClass(mainClass);
                 
                 if (isAssignableFrom(clazz)) {
                     T instance = (T) clazz.newInstance();
                     classList.add(new Pair(instance, attr));
                 }
             } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                System.out.println("Cannot load plugins: " + ex.getMessage());
+                System.err.println("Cannot load plugins: " + ex.getMessage());
             }
         }
         

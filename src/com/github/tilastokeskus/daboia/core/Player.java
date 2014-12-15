@@ -1,11 +1,13 @@
 
 package com.github.tilastokeskus.daboia.core;
 
-import com.github.tilastokeskus.daboia.util.RandomColor;
+import com.github.tilastokeskus.daboia.util.ColorFactory;
 import java.awt.Color;
 import java.util.Objects;
 
 public class Player {
+    
+    private final static Color colorMix = new Color(180, 180, 180);
     
     private final int id;    
     private final String name;
@@ -24,7 +26,7 @@ public class Player {
         this.initialX = initialX;
         this.initialY = initialY;
         this.isAlive = true;
-        this.snakeColor = new RandomColor(Color.WHITE).nextColor();
+        this.snakeColor = ColorFactory.getNextColor();
         this.name = name;
         this.shouldBeDrawn = true;
     }
