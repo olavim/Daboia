@@ -1,0 +1,48 @@
+<assembly>
+    <id>dist</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <dependencySets>
+        <dependencySet>
+            <!--Include runtime dependencies-->
+            <outputDirectory>lib</outputDirectory>
+            <scope>runtime</scope>
+			<excludes>
+				<exclude>com.github.tilastokeskus:daboia</exclude>
+			</excludes>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <!--Get the generated application jar-->
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <!--Get application resources-->
+            <directory>src/main/resources/config</directory>
+            <outputDirectory>config</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <!--Get application resources-->
+            <directory>src/main/resources/images</directory>
+            <outputDirectory>images</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <!--Get application resources-->
+            <directory>src/main/resources/logic</directory>
+            <outputDirectory>logic</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>    
+    </fileSets>
+</assembly>

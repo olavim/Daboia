@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-X-COMMENT: Main-Class will be added automatically by build
-Class-Path: lib/miglayout-4.0.jar lib/ini4j-0.5.2.jar
-Main-Class: daboia.Main
