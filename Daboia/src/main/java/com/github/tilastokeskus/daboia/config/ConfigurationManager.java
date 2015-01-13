@@ -1,8 +1,9 @@
 
 package com.github.tilastokeskus.daboia.config;
 
+import com.github.tilastokeskus.daboia.ResourceManager;
+import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import org.ini4j.Ini;
 
 public class ConfigurationManager {
@@ -12,10 +13,9 @@ public class ConfigurationManager {
     public static void loadConfigs() throws IOException {
         config = new Configuration();
         
-        String path = "/config/daboia.conf";
-        URL url = ConfigurationManager.class.getResource(path);
-        System.out.println(url.getPath());
-        Ini ini = new Ini(url);
+        String path = ResourceManager.getExternalConfigFilePath();
+        Ini ini = new Ini(new File(path));
+        
         Ini.Section networkConfig = ini.get("network");
         
         for (String key : networkConfig.keySet()) {

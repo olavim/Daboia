@@ -13,9 +13,12 @@ public class PluginManager {
     
     public static void loadPlugins() {
         List<Pair<DaboiaLogic, Attributes>> plugins = PluginLoader.loadPlugins();
-        logicHandlers = new ArrayList<>();
-        for (Pair<DaboiaLogic, Attributes> plugin : plugins) {
-            handlePlugin(plugin);
+        
+        if (plugins != null) {
+            logicHandlers = new ArrayList<>();
+            for (Pair<DaboiaLogic, Attributes> plugin : plugins) {
+                handlePlugin(plugin);
+            }
         }
     }
 

@@ -4,12 +4,12 @@
         <format>zip</format>
     </formats>
 
-    <includeBaseDirectory>true</includeBaseDirectory>
+    <includeBaseDirectory>false</includeBaseDirectory>
 
     <dependencySets>
         <dependencySet>
             <!--Include runtime dependencies-->
-            <outputDirectory>lib</outputDirectory>
+            <outputDirectory>./</outputDirectory>
             <scope>runtime</scope>
 			<excludes>
 				<exclude>com.github.tilastokeskus:daboia</exclude>
@@ -29,17 +29,17 @@
         <fileSet>
             <!--Get application resources-->
             <directory>src/main/resources/config</directory>
-            <outputDirectory>config</outputDirectory>
+            <outputDirectory>../config</outputDirectory>
         </fileSet>
         <fileSet>
             <!--Get application resources-->
             <directory>src/main/resources/images</directory>
-            <outputDirectory>images</outputDirectory>
+            <outputDirectory>../images</outputDirectory>
         </fileSet>
         <fileSet>
             <!--Get application resources-->
             <directory>src/main/resources/logic</directory>
-            <outputDirectory>logic</outputDirectory>
+            <outputDirectory>../logic</outputDirectory>
             <includes>
                 <include>*.jar</include>
             </includes>

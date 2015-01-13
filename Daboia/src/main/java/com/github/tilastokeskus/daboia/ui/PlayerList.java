@@ -174,7 +174,11 @@ public class PlayerList extends LabelList<Player> {
             public void mouseReleased(MouseEvent e) {
                 ComponentList componentList = new LabelList();
                 componentList.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-                componentList.addObjects(PluginManager.getLogicHandlers());
+                
+                List<DaboiaLogic> handlers = PluginManager.getLogicHandlers();
+                if (handlers != null) {
+                    componentList.addObjects(PluginManager.getLogicHandlers());
+                }
 
                 ComponentListChooser chooser = new ComponentListChooser<>(parent, componentList);
                 DaboiaLogic logicHandler = (DaboiaLogic) chooser.showDialog();
@@ -184,7 +188,7 @@ public class PlayerList extends LabelList<Player> {
                     player.setLogicHandler(logicHandler);
                     list.refresh();
                 }
-            }            
+            }
         }
         
     }

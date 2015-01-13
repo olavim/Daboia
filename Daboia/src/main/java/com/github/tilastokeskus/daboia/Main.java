@@ -20,9 +20,12 @@ public class Main {
     private static MainWindow mainInterface;
     
     public static void main(String[] args) throws IOException {
+        ResourceManager.exportConfigIfNeeded();
+        ResourceManager.exportLogicsIfNeeded();
+        
         try {
             ConfigurationManager.loadConfigs();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
         

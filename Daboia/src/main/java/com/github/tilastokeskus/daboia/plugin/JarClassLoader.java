@@ -18,18 +18,18 @@ public class JarClassLoader<T> {
     private URL[] urls;
     private boolean recursive;
 
-    public JarClassLoader(String folderPath, boolean recursive) {
+    public JarClassLoader(String directoryPath, boolean recursive)
+            throws IOException {
         this.recursive = recursive;
         
         try {
-            URL url = JarClassLoader.class.getResource(folderPath);
-            this.urls = getFolderURLS(new File(url.getPath()));
-        
-            if (urls.length == 0) {
-                System.out.println("No plugins found.");
-            }
-        } catch (MalformedURLException ex) {
-            System.err.println("Cannot load plugins: " + ex.getMessage());
+            this.urls = getFolderURLS(new File(directoryPath));
+        } catch (NullPointerException ex) {
+            throw new IOException("Directory not found: " + directoryPath);
+        }
+
+        if (urls.length == 0) {
+            throw new IOException("No plugins found");
         }
     }
     
