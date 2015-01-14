@@ -1,6 +1,7 @@
 
 package com.github.tilastokeskus.daboia.ui;
 
+import com.github.tilastokeskus.daboia.core.game.GameState;
 import com.github.tilastokeskus.daboia.core.game.SavedStateGame;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
@@ -67,7 +68,11 @@ public class GameWindow implements GUI, Observer {
         if (this.stateSlider == null || this.frame == null)
             throw new IllegalStateException("Window has not been initialized");
         
-        stateSlider.setValue(game.getCurrentState().getId());
+        GameState currentState = game.getCurrentState();
+        if (currentState != null) {
+            stateSlider.setValue(game.getCurrentState().getId());
+        }
+        
         frame.repaint();
     }
 

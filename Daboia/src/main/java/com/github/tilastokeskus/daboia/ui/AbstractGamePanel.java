@@ -33,8 +33,9 @@ public abstract class AbstractGamePanel extends JPanel {
     }
     
     protected int getSquareSize() {
-        return squareSize * Math.min(getParent().getWidth()  / getMinimumSize().width,
-                                     getParent().getHeight() / getMinimumSize().height);
+        double wFact = 1.0 * getParent().getWidth() / getMinimumSize().width;
+        double hFact = 1.0 * getParent().getHeight() / getMinimumSize().height;
+        return (int) (squareSize * Math.min(wFact, hFact));
     }
     
     protected int translateToBoard(int p) {
