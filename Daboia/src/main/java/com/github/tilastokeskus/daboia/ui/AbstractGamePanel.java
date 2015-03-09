@@ -6,6 +6,7 @@ import com.github.tilastokeskus.daboia.core.Player;
 import com.github.tilastokeskus.daboia.core.game.DaboiaGame;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.List;
 import javax.swing.JPanel;
 
 public abstract class AbstractGamePanel extends JPanel {
@@ -60,7 +61,7 @@ public abstract class AbstractGamePanel extends JPanel {
         return new Dimension(width, height);
     }
     
-    protected abstract void drawPlayers(Iterable<Player> players, Graphics g);
+    protected abstract void drawPlayers(List<Player> players, Graphics g);
     protected abstract void drawApple(Piece apple, Graphics g);
     
 }

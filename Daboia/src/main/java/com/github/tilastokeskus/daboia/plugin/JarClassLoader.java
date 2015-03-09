@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.jar.Attributes;
 import com.github.tilastokeskus.daboia.util.ClassUtils;
 import com.github.tilastokeskus.daboia.util.Pair;
+import java.util.Arrays;
 import java.util.List;
 
 public class JarClassLoader<T> {
@@ -23,7 +24,7 @@ public class JarClassLoader<T> {
         this.recursive = recursive;
         
         try {
-            this.urls = getFolderURLS(new File(directoryPath));
+            this.urls = getFolderURLs(new File(directoryPath));
         } catch (NullPointerException ex) {
             throw new IOException("Directory not found: " + directoryPath);
         }
@@ -67,14 +68,13 @@ public class JarClassLoader<T> {
         return cast.getClass().isAssignableFrom(clazz);
     }
     
-    private URL[] getFolderURLS(final File folder) throws MalformedURLException {
+    private URL[] getFolderURLs(final File folder) throws MalformedURLException {
         ArrayList<URL> urlList = new ArrayList<>();
         
         for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                if (recursive) {
-                    getFolderURLS(fileEntry);
-                }
+            if (fileEntry.isDirectory() && recursive) {
+                URL[] urlsInFolder = getFolderURLs(fileEntry);
+                urlList.addAll(Arrays.asList(urlsInFolder));
             } else if (fileEntry.getName().endsWith(".jar")) {
                 urlList.add(fileEntry.toURI().toURL());
             }

@@ -107,17 +107,14 @@ public class Player {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        
+        if (getClass() != obj.getClass())
             return false;
-        }
+        
         final Player other = (Player) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return this.name.equals(other.name);
+        return this.id == other.id && this.name.equals(other.name);
     }
 
     @Override

@@ -2,23 +2,21 @@
 package com.github.tilastokeskus.daboia.core.game;
 
 import com.github.tilastokeskus.daboia.core.Piece;
-import com.github.tilastokeskus.daboia.core.Player;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import org.apache.commons.collections4.list.TreeList;
 
 public class Board {
     
-    private final List<Point> unoccupied;
+    private final TreeList<Point> unoccupied;
     private final Random random;
     
-    private int[][] core;
+    private final int[][] core;
     private Piece apple;
     
     public Board(int width, int height) {
         this.core = new int[height][width];
-        this.unoccupied = new ArrayList<>();
+        this.unoccupied = new TreeList<>();
         this.random = new Random();
         this.apple = new Piece(width/2, height/2);
         this.core[apple.y][apple.x] = 8;
@@ -52,9 +50,9 @@ public class Board {
     }
     
     public void placeApple() {
-        if (!this.unoccupied.isEmpty()) {
-            int index = this.random.nextInt(this.unoccupied.size());
-            Point p = this.unoccupied.get(index);
+        if (!unoccupied.isEmpty()) {
+            int index = random.nextInt(unoccupied.size());
+            Point p = unoccupied.get(index);            
             this.apple = new Piece(p.x, p.y);
         } else {
             this.apple = null;
@@ -77,31 +75,10 @@ public class Board {
         return this.unoccupied.size();
     }
     
-    public void refresh(List<Player> players) {
-        this.core = new int[this.core.length][this.core[0].length];
-        
-        for (Player player : players) {
-            if (!player.isAlive()) {
-                continue;
-            }
-            
-            for (Piece piece : player.getSnake().getPieces()) {                
-                this.core[piece.y][piece.x] = BoardConstants.SNAKE_BODY;
-            }
-
-            Piece head = player.getSnake().getHead();
-            this.core[head.y][head.x] = BoardConstants.SNAKE_HEAD;
-        }
-        
-        if (apple != null) {
-            this.core[apple.y][apple.x] = BoardConstants.APPLE;
-        }
-    }
-    
     public int[][] getCore() {
-        int[][] corecpy = new int[this.core.length][this.core[0].length];
+        int[][] corecpy = new int[core.length][core[0].length];
         for (int i = 0; i < corecpy.length; i++) {
-            System.arraycopy(this.core[i], 0, corecpy[i], 0, corecpy[i].length);
+            System.arraycopy(core[i], 0, corecpy[i], 0, corecpy[i].length);
         }
         
         return corecpy;

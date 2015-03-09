@@ -24,12 +24,11 @@ public class Piece {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        
+        if (getClass() != obj.getClass())
             return false;
-        }
         
         final Piece other = (Piece) obj;        
         return this.x == other.x && this.y == other.y;

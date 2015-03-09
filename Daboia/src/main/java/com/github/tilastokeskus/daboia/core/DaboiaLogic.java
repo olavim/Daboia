@@ -3,7 +3,6 @@ package com.github.tilastokeskus.daboia.core;
 import com.github.tilastokeskus.daboia.Main;
 import com.github.tilastokeskus.daboia.core.game.DaboiaGame;
 import com.github.tilastokeskus.daboia.core.game.GameSettings;
-import com.github.tilastokeskus.daboia.core.Player;
 import com.github.tilastokeskus.daboia.util.ClassUtils;
 import java.util.Arrays;
 

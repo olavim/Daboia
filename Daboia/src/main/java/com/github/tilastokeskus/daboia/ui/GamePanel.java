@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.util.List;
 import javax.swing.border.EmptyBorder;
 
 public class GamePanel extends AbstractGamePanel {
@@ -24,13 +25,10 @@ public class GamePanel extends AbstractGamePanel {
     }
 
     @Override
-    protected void drawPlayers(Iterable<Player> players, Graphics g) {
-        for (Player player : players) {
-            if (!player.getShouldBeDrawn())
-                continue;
-            
-            drawPlayer(player, g);
-        }
+    protected void drawPlayers(List<Player> players, Graphics g) {
+        players.stream()
+                .filter(Player::getShouldBeDrawn)
+                .forEach(p -> drawPlayer(p, g));
     }
 
     @Override

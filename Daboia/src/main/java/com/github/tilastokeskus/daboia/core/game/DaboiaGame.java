@@ -43,7 +43,7 @@ public abstract class DaboiaGame {
     
     /**
      * Resets the game to its initial state. That is, the state that was in
-     * effect after the constructor had initialized all fields.
+     * effect after the constructor was called.
      */
     public abstract void reset();
     

@@ -28,11 +28,8 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     public void reset() {
         this.numPlayersAlive = players.size();
         this.numMovesNotEaten = 0;
-        this.board = new Board(width, height);
-        
-        for (Player player : players) {
-            player.reset();
-        }
+        this.board = new Board(width, height);        
+        players.forEach(Player::reset);
     }
     
     @Override
@@ -60,11 +57,8 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
         moveSnake(player.getSnake(), direction);
         checkIfAppleEaten(player.getSnake());
         
-        if (playerShouldDie(player)) {
+        if (playerShouldDie(player))
             handlePlayerDeath(player);
-        }
-        
-        this.board.refresh(players);
     }
     
     @Override
@@ -111,58 +105,51 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     private boolean playerIsOutOfBounds(Player player) {
         int x = player.getSnake().getHead().x;
         int y = player.getSnake().getHead().y;
-        return x < 0 || x >= this.getWidth() || y < 0 || y >= this.getHeight();
+        return x < 0 || x >= getWidth() || y < 0 || y >= getHeight();
     }
     
     private boolean playerCollidesWithSomeone(Player player) {
-        /* also checks for collision with itself */
-        for (Player otherPlayer : this.players) {
-            if (!otherPlayer.isAlive()) continue;
-            
-            if (player.getSnake().collidesWith(otherPlayer.getSnake())) {
-                return true;
-            }
-        }    
+        Snake playerSnake = player.getSnake();
         
-        return false;
+        /* also checks for collision with itself */
+        return players.stream()
+                .filter(p -> p.isAlive())
+                .anyMatch(p -> playerSnake.collidesWith(p.getSnake()));
     }
     
     protected void moveSnake(Snake snake, Direction direction) {
-        this.board.set(snake.getHead().x, snake.getHead().y, BoardConstants.SNAKE_BODY);
-        this.board.set(snake.getTail().x, snake.getTail().y, BoardConstants.FLOOR);
+        board.set(snake.getHead().x, snake.getHead().y, BoardConstants.SNAKE_BODY);
+        board.set(snake.getTail().x, snake.getTail().y, BoardConstants.FLOOR);
         
         snake.move(direction);
-        this.numMovesNotEaten++;
+        numMovesNotEaten++;
         
-        this.board.set(snake.getHead().x, snake.getHead().y, BoardConstants.SNAKE_HEAD);
-        this.board.set(snake.getTail().x, snake.getTail().y, BoardConstants.SNAKE_BODY);
+        board.set(snake.getHead().x, snake.getHead().y, BoardConstants.SNAKE_HEAD);
+        board.set(snake.getTail().x, snake.getTail().y, BoardConstants.SNAKE_BODY);
     }
     
     protected void checkIfAppleEaten(Snake snake) {
         if (snake.collidesWith(this.getApple())) {
             snake.grow();
-            this.placeApple();
-            this.numMovesNotEaten = 0;
+            placeApple();
+            numMovesNotEaten = 0;
         }
     }
     
     private void placeApple() {
-        if (this.placeApples) {
-            this.board.placeApple();
-        }
+        if (this.placeApples)
+            board.placeApple();
     }
     
     protected void handlePlayerDeath(Player player) {
         player.setIsAlive(false);
         numPlayersAlive--;
         
-        for (Piece piece : player.getSnake().getPieces()) {
-            this.board.set(piece.x, piece.y, BoardConstants.FLOOR);
-        }
+        for (Piece piece : player.getSnake().getPieces())
+            board.set(piece.x, piece.y, BoardConstants.FLOOR);
         
-        if (this.numPlayers() > 1 && numPlayersAlive > 1) {
+        if (numPlayers() > 1 && numPlayersAlive > 1)
             player.setShouldBeDrawn(false);
-        }
     }
 
 }

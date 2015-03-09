@@ -20,7 +20,7 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
     }
     
     /**
-     * Moves the snake by the rules defined by
+     * Moves the snake according to the rules defined by
      * {@link AbstractDaboiaGame#makeMove(Player, Direction)}, and additionally
      * saves the player's state to memory, which can then later be accessed.
      * <p>
@@ -36,9 +36,9 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
     public void makeMove(Player player, Direction direction) {
         super.makeMove(player, direction);
         
-        this.currentState.setAliveStatus(player, player.isAlive());
-        this.currentState.setShouldDrawStatus(player, player.getShouldBeDrawn());
-        this.currentState.setSnake(player, player.getSnake().copy());
+        currentState.setAliveStatus(player, player.isAlive());
+        currentState.setShouldDrawStatus(player, player.getShouldBeDrawn());
+        currentState.setSnake(player, player.getSnake().copy());
     }
     
     /**
@@ -46,11 +46,11 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      * initially identical to the previous one.
      */
     public void startNextState() {
-        this.currentState.setApple(this.getApple());
+        this.currentState.setApple(getApple());
         GameState next = new GameState(currentState);
         currentState.setNext(next);
         currentState = next;
-        this.lastState = currentState;
+        lastState = currentState;
     }
     
     /**
@@ -58,27 +58,37 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      * In most cases the game should be rewinded before traversing through the
      * states.
      * <p>
-     * To be more specific, this method first places the apple as it appears in
-     * the current state's memory. Then it syncs all the players' states with
-     * the current state of the game by calling the
-     * {@link #recallPlayerStates() recallPlayerStates} method. Lastly, the
-     * current state is set to point to the next state of the game. If this next
-     * state is null, this method returns false, and otherwise true.
+     * To be more specific, this method places the apple and players as they
+     * appear in the current state's memory. Lastly, the current state is set to
+     * point to the next state of the game. If this next state is null, this
+     * method returns false, and otherwise true.
      * 
-     * @return  true if there is a next state, otherwise false.
+     * @return True if there is a next state, otherwise false.
      */
     @Override
     public boolean nextState() {
-        this.setApple(this.currentState.getApple());        
-        this.recallPlayerStates();
+        setApple(currentState.getApple());        
+        recallPlayerStates();
         
-        this.currentState = this.currentState.getNext();
-        return this.currentState != null;
+        if (currentState.getNext() != null)
+            currentState = currentState.getNext();
+        
+        return currentState.getNext() != null;
     }
 
+    /**
+     * Does the exact opposite of {@link nextState()}.
+     * @return True if there is a previous state, otherwise false.
+     */
     @Override
-    public boolean previousState() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean previousState() {        
+        if (currentState.getPrevious() != null)
+            currentState = currentState.getPrevious();
+        
+        setApple(currentState.getApple());        
+        recallPlayerStates();
+        
+        return currentState.getPrevious() != null;
     }
     
     @Override
@@ -94,10 +104,10 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      * are set to correspond the current game state.
      */
     public void recallPlayerStates() {
-        for (Player player : this.getPlayers()) {
-            boolean isAlive = this.currentState.getAliveStatus(player);
-            boolean shouldDraw = this.currentState.getShouldDrawStatus(player);
-            Snake snake = this.currentState.getSnake(player);
+        for (Player player : getPlayers()) {
+            boolean isAlive = currentState.getAliveStatus(player);
+            boolean shouldDraw = currentState.getShouldDrawStatus(player);
+            Snake snake = currentState.getSnake(player);
 
             player.setIsAlive(isAlive);
             player.setShouldBeDrawn(shouldDraw);
@@ -145,12 +155,11 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
     
     /**
      * Resets the game and assigns its current state to point to its initial
-     * state. The default use is to rewind, then traverse through the states
-     * with the {@link #nextState() nextState} method
+     * state.
      */
     public void rewind() {
         super.reset();
-        this.currentState = this.initialState;
+        currentState = initialState;
     }
     
     /**
@@ -159,7 +168,7 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      * @return  true if current state is the initial one, otherwise false.
      */
     public boolean isRewinded() {
-        return this.currentState == this.initialState;
+        return currentState == initialState;
     }
 
 }

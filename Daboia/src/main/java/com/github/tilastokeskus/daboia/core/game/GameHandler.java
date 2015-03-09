@@ -24,9 +24,12 @@ public abstract class GameHandler<T extends DaboiaGame> extends Observable {
 
     private final ScheduledExecutorService moveSchedule;
     
+    private boolean isPaused;
+    
     public GameHandler(T game) {
         this.game = game;
         this.moveSchedule = Executors.newSingleThreadScheduledExecutor();
+        this.isPaused = false;
     }
     
     public Collection<Player> getRegisteredPlayers() {
@@ -47,9 +50,10 @@ public abstract class GameHandler<T extends DaboiaGame> extends Observable {
     
     public void startGame(int refreshrate) {
         Runnable roundCmd = () -> {
+            if (isPaused) return;
             
-            /* Runnable swallows all exceptions, thus we wrap the function
-             * in a try-catch
+            /* Runnable swallows exceptions, thus we wrap the function in a
+             * try-catch
              */
             try {
                 this.playRound();
@@ -68,7 +72,8 @@ public abstract class GameHandler<T extends DaboiaGame> extends Observable {
          */
         moveSchedule.scheduleAtFixedRate(roundCmd,
                                          START_DELAY,
-                                         refreshrate,TimeUnit.MILLISECONDS);
+                                         refreshrate,
+                                         TimeUnit.MILLISECONDS);
     }
     
     /**
@@ -82,6 +87,10 @@ public abstract class GameHandler<T extends DaboiaGame> extends Observable {
     
     public void stopGame() {
         this.stopGame(STOP_DELAY);
+    }
+    
+    public void setPaused(boolean paused) {
+        this.isPaused = paused;
     }
     
     protected abstract void playRound();

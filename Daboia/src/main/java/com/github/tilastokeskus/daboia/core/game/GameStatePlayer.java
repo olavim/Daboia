@@ -1,7 +1,7 @@
 
 package com.github.tilastokeskus.daboia.core.game;
 
-public class GameStatePlayer extends WindowedGameHandler<SavedStateGame> {
+public class GameStatePlayer extends ControllableWindowedGameHandler {
     
     public GameStatePlayer(SavedStateGame game) {
         super(game);
@@ -21,7 +21,7 @@ public class GameStatePlayer extends WindowedGameHandler<SavedStateGame> {
         if (!nextStateExists) {
             
             /* if there was no next moment, the game has ended */
-            this.stopGame();
+            this.setPaused(true);
         }        
     }
 

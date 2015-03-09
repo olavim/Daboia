@@ -14,11 +14,13 @@ public class GameState {
     private final Map<Player, Boolean> aliveStatuses;
     private final Map<Player, Boolean> shouldDrawStatuses;
     
-    private Piece apple;    
+    private Piece apple;
     private GameState next;
+    private GameState previous;
 
     public GameState(GameState previous) {
         this.id = (previous == null) ? 1 : previous.id + 1;
+        this.previous = previous;
         this.next = null;
         
         if (previous != null) {
@@ -70,6 +72,10 @@ public class GameState {
 
     public GameState getNext() {
         return this.next;
+    }
+
+    public GameState getPrevious() {
+        return this.previous;
     }
 
     public void setNext(GameState state) {

@@ -56,7 +56,7 @@ public class ResourceManager {
     }
     
     public static String getLogicFilePath() {
-        return "/logic/Flood.jar";
+        return "/logic/inner/Flood.jar";
     }
     
 }

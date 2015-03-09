@@ -3,12 +3,16 @@ package com.github.tilastokeskus.daboia.ui;
 
 import com.github.tilastokeskus.daboia.core.game.GameState;
 import com.github.tilastokeskus.daboia.core.game.SavedStateGame;
+import com.github.tilastokeskus.daboia.core.game.GameHandlerController;
+import com.github.tilastokeskus.daboia.ui.listener.StateSliderChangeListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Window;
 import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Observable;
@@ -26,11 +30,22 @@ public class GameWindow implements GUI, Observer {
     private final static Color background = new Color(100, 100, 100);
     
     private final SavedStateGame game;
+    private GameHandlerController controller;
     private JFrame frame;
-    private JSlider stateSlider;
+    private ProgressSlider stateSlider;
     
     public GameWindow(SavedStateGame game) {
+        this(game, null);
+    }
+    
+    public GameWindow(SavedStateGame game,
+                      GameHandlerController controller) {
         this.game = game;
+        this.controller = controller;
+    }
+    
+    public void setController(GameHandlerController controller) {
+        this.controller = controller;
     }
     
     @Override
@@ -82,14 +97,17 @@ public class GameWindow implements GUI, Observer {
     }
     
     private void addContents(Container container) {        
-        container.setLayout(new MigLayout("insets 5, wrap 1", "[grow]", "[grow]"));
+        container.setLayout(
+                new MigLayout("insets 0, wrap 1", "[grow]", "[grow]5"));
         
         JPanel gamePanel = createGamePanel(game);
         container.add(gamePanel, "center, grow");
         
-        stateSlider = new JSlider(1, game.numStates(), 1);
+        stateSlider = new ProgressSlider(1, game.numStates(), 1);
         stateSlider.setOpaque(false);
-        container.add(stateSlider, "south, grow, w " + gamePanel.getPreferredSize().width);
+        stateSlider.setPercent(0);
+        container.add(stateSlider,
+                      "south, gapy 0 5, gapx 5 5, h 12");
     }
 
     private JPanel createGamePanel(SavedStateGame game) {
@@ -101,7 +119,8 @@ public class GameWindow implements GUI, Observer {
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 1));        
         gamePanel.setBorder(border);
         
-        JPanel gamePanelWrapper = new JPanel(new MigLayout("insets 0", "[grow]", "[grow]"));
+        JPanel gamePanelWrapper = new JPanel(
+                new MigLayout("insets 0", "[grow]", "[grow]"));
         gamePanelWrapper.add(gamePanel, "center");
         return gamePanelWrapper;
     }
@@ -121,6 +140,22 @@ public class GameWindow implements GUI, Observer {
                 game.sendKeyInput(e.getKeyChar());
             }
         });
+
+        if (this.controller != null) {
+            stateSlider.addChangeListener(
+                    new StateSliderChangeListener(game, controller, this));
+            stateSlider.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    controller.pause();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    controller.play();
+                }
+            });
+        }
     }
     
 }

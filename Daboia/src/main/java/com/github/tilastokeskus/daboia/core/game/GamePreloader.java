@@ -35,7 +35,7 @@ public final class GamePreloader {
         if (numPlayers == 1)
             return 0;
         
-        return 1 - (double) numPlayersAlive / (double) (numPlayers - 1);
+        return 1.0 - 1.0 * numPlayersAlive / (numPlayers - 1);
     }
 
     private void playGame() {
@@ -47,9 +47,9 @@ public final class GamePreloader {
 
     private void playRound() {
         for (Player player : game.getPlayers()) {
-            if (!player.isAlive()) continue;
-            if (game.isGameOver()) break;            
-            game.makeMove(player, getDirection(player));
+            if (game.isGameOver()) break;
+            if (player.isAlive())
+                game.makeMove(player, getDirection(player));
         }
     }
 

@@ -4,8 +4,9 @@ import com.github.tilastokeskus.daboia.config.ConfigurationManager;
 import com.github.tilastokeskus.daboia.core.game.GamePreloader;
 import com.github.tilastokeskus.daboia.core.game.GameSettings;
 import com.github.tilastokeskus.daboia.core.Player;
-import com.github.tilastokeskus.daboia.core.game.GameHandler;
 import com.github.tilastokeskus.daboia.core.game.GameStatePlayer;
+import com.github.tilastokeskus.daboia.core.game.ControllableWindowedGameHandler;
+import com.github.tilastokeskus.daboia.core.game.GameHandlerController;
 import com.github.tilastokeskus.daboia.core.game.SavedStateGame;
 import com.github.tilastokeskus.daboia.ui.MainWindow;
 import com.github.tilastokeskus.daboia.plugin.PluginManager;
@@ -53,7 +54,8 @@ public class Main {
             GamePreloader preloader = new GamePreloader(game);
             preloader.preload();
             
-            GameHandler handler = new GameStatePlayer(game);
+            ControllableWindowedGameHandler handler = new GameStatePlayer(game);
+            handler.setController(new GameHandlerController(handler));
             
             /* framerate must be at least 1 */
             handler.startGame(refreshrate + 1);

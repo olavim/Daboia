@@ -46,13 +46,9 @@ public class Snake {
     }
     
     public boolean collidesWith(Piece otherPiece) {
-        for (Piece piece : this.pieces) {            
-            if (piece != otherPiece && piece.equals(otherPiece)) {
-                return true;
-            }
-        }
-        
-        return false;
+        return this.pieces.stream()
+                .filter(p -> p != otherPiece)
+                .anyMatch(p -> p.equals(otherPiece));
     }
     
     public boolean collidesWith(Snake otherSnake) {
@@ -60,17 +56,12 @@ public class Snake {
             return this.doesCollideWithItself();
         }
         
-        for (Piece piece : otherSnake.getPieces()) {
-            if (this.collidesWith(piece)) {
-                return true;
-            }
-        }
-        
-        return false;
+        return otherSnake.getPieces().stream()
+                .anyMatch(p -> this.collidesWith(p));
     }
     
     public boolean doesCollideWithItself() {
-        return Snake.this.collidesWith(getHead());
+        return this.collidesWith(getHead());
     }
     
     public void setPieces(List<Piece> pieces) {
