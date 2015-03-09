@@ -11,6 +11,8 @@ If programming is not one of your skills, fear not; a WASD-operated "AI" ~~is~~ 
 
 The game is written in Java 8. The source code is wrapped inside a NetBeans-project.
 
+![Image of Daboia](/docs/snapshot.png?raw=true)
+
 ### Version history
 
 ##### Current Version (0.0.9)
