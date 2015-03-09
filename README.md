@@ -28,4 +28,4 @@ The current version will remain as 0.0.9 until fully functional local gameplay i
   - [x] Setup and launch the game according to these configurations.
 - [x] Preload each game.
 - [ ] Show the preloader's progress.
-- [ ] Examine the game back and forth. That is, after the game has been preloaded, it should be possible to play the game as a recording that can be rewinded, fast forwarded and paused at will.
+- [x] Examine the game back and forth. That is, after the game has been preloaded, it should be possible to play the game as a recording that can be rewinded, fast forwarded and paused at will. **Core functionality exists**: some tinkering and visual enchancements are still appropriate.
