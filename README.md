@@ -17,7 +17,7 @@ The game is written in Java 8. The source code is wrapped inside a NetBeans-proj
 
 ##### Current Version (0.0.9)
 
-As of now, the game consists of a functional local single- and multiplayer. That being said, the GUI is only *nearly there*, so playing an actual game with it needs some hacking. An online multiplayer is on its way as well in the future. The multiplayer is/will be accomplished with client-server technology. Users will mainly connect to each other via a lobby (which is a separate project), but direct connecting will be supported in the future.
+As of now, the game consists of a functional local single- and multiplayer. ~~That being said, the GUI is only *nearly there*, so playing an actual game with it needs some hacking.~~ The game is currently playable in a local environment. An online multiplayer is on its way as well in the future. The multiplayer is/will be accomplished with client-server technology. Users will mainly connect to each other via a lobby (which is a separate project), but direct connecting will be supported in the future.
 
 The current version will remain as 0.0.9 until fully functional local gameplay is accomplished, which I see as an appropriate milestone that can be shown off to those who are interested in this project (hi grandma). By *fully functional local gameplay* I mean being able to:
 
