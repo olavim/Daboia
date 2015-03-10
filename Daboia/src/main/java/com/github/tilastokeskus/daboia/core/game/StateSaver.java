@@ -1,6 +1,4 @@
-package com.github.tilastokeskus.daboia.util;
-
-import com.github.tilastokeskus.daboia.core.game.GameState;
+package com.github.tilastokeskus.daboia.core.game;
 
 public interface StateSaver {
     public GameState getInitialState();

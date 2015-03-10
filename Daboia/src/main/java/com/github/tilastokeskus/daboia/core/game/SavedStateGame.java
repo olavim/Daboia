@@ -4,19 +4,22 @@ package com.github.tilastokeskus.daboia.core.game;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Player;
 import com.github.tilastokeskus.daboia.core.Snake;
-import com.github.tilastokeskus.daboia.util.StateSaver;
 import java.util.List;
 
 public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
     
+    private static final long serialVersionUID = 2015_03_10_19_43L;
+    
     private GameState initialState;
     private GameState currentState;
     private GameState lastState;
+    private int numStates;
     
     public SavedStateGame(List<Player> players, int width, int height) {
         super(players, width, height);
-        this.initialState = new GameState(null);
+        this.initialState = new GameState(1);
         this.currentState = this.initialState;
+        this.numStates = 1;
     }
     
     /**
@@ -36,9 +39,9 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
     public void makeMove(Player player, Direction direction) {
         super.makeMove(player, direction);
         
-        currentState.setAliveStatus(player, player.isAlive());
-        currentState.setShouldDrawStatus(player, player.getShouldBeDrawn());
-        currentState.setSnake(player, player.getSnake().copy());
+        currentState.set("alive", player, player.isAlive());
+        currentState.set("shouldDraw", player, player.getShouldBeDrawn());
+        currentState.set("snake", player, player.getSnake().copy());
     }
     
     /**
@@ -47,10 +50,9 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      */
     public void startNextState() {
         this.currentState.setApple(getApple());
-        GameState next = new GameState(currentState);
-        currentState.setNext(next);
-        currentState = next;
-        lastState = currentState;
+        GameState next = new GameState(currentState.getId() + 1, currentState);
+        linkLast(next);
+        this.numStates++;
     }
     
     /**
@@ -105,10 +107,10 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      */
     public void recallPlayerStates() {
         for (Player player : getPlayers()) {
-            boolean isAlive = currentState.getAliveStatus(player);
-            boolean shouldDraw = currentState.getShouldDrawStatus(player);
-            Snake snake = currentState.getSnake(player);
-
+            boolean isAlive = (boolean) currentState.getValue("alive", player);
+            boolean shouldDraw = (boolean) currentState.getValue("shouldDraw", player);
+            Snake snake = (Snake) currentState.getValue("snake", player);
+            
             player.setIsAlive(isAlive);
             player.setShouldBeDrawn(shouldDraw);
             player.setSnake(snake);
@@ -169,6 +171,46 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      */
     public boolean isRewinded() {
         return currentState == initialState;
+    }
+    
+    private void linkLast(GameState next) {
+        currentState.setNext(next);
+        next.setPrevious(currentState);
+        currentState = next;
+        lastState = currentState;
+    }
+    
+    /**
+     * Saves the state of this {@code SavedStateGame} instance to a stream
+     * (that is, serializes it).
+     *
+     * @serialData The number of states this game consists of is emitted (int),
+     *             followed by all the actual states in order.
+     */
+    private void writeObject(java.io.ObjectOutputStream s)
+            throws java.io.IOException {
+        s.defaultWriteObject();
+        
+        s.writeInt(numStates);
+        for (GameState x = initialState; x != null; x = x.getNext())
+            s.writeObject(x);
+    }
+
+    /**
+     * Reconstitutes this {@code SavedStateGame} instance from a stream
+     * (that is, deserializes it).
+     */
+    private void readObject(java.io.ObjectInputStream s)
+            throws java.io.IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        
+        numStates = s.readInt();
+        initialState = (GameState) s.readObject();
+        currentState = initialState;        
+        for (int i = 1; i < numStates; i++)
+            linkLast((GameState) s.readObject());
+        
+        rewind();
     }
 
 }

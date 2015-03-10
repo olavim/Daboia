@@ -4,6 +4,9 @@ package com.github.tilastokeskus.daboia.core.game;
 import com.github.tilastokeskus.daboia.core.DaboiaLogic;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Player;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public final class GamePreloader {
     
@@ -26,6 +29,17 @@ public final class GamePreloader {
         playGame();               /* do the actual preloading */
         game.finalizeRecording(); /* finalize the recording */
         game.rewind();            /* rewind the game back to the beginning */
+        
+        try {
+            FileOutputStream fileOut = new FileOutputStream("daboia.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(game);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized data is saved in /tmp/employee.ser");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public double getProgress() {

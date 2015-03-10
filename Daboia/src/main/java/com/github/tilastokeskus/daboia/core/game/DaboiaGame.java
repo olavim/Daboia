@@ -7,7 +7,7 @@ import com.github.tilastokeskus.daboia.core.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DaboiaGame {
+public abstract class DaboiaGame implements java.io.Serializable {
     
     protected final List<Player> players;
     protected int width;

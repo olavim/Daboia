@@ -5,17 +5,18 @@ import com.github.tilastokeskus.daboia.util.ColorFactory;
 import java.awt.Color;
 import java.util.Objects;
 
-public class Player {
+public class Player implements java.io.Serializable {
     
-    private final static Color colorMix = new Color(180, 180, 180);
+    private static final long serialVersionUID = 2015_03_10_18_17L;
     
     private final int id;    
     private final String name;
     private final int initialX;
     private final int initialY;
     
+    private transient DaboiaLogic logicHandler;
+    
     private Snake snake;
-    private DaboiaLogic logicHandler;
     private Color snakeColor;
     private boolean isAlive;
     private boolean shouldBeDrawn;

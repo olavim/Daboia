@@ -4,7 +4,9 @@ package com.github.tilastokeskus.daboia.core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Snake {
+public class Snake implements java.io.Serializable {
+    
+    private static final long serialVersionUID = 2015_03_10_18_16L;
     
     private List<Piece> pieces;
     private int length;

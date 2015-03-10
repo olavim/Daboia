@@ -4,20 +4,19 @@ package com.github.tilastokeskus.daboia.core.game;
 import com.github.tilastokeskus.daboia.core.Piece;
 import java.awt.Point;
 import java.util.*;
-import org.apache.commons.collections4.list.TreeList;
 
-public class Board {
+public class Board implements java.io.Serializable {
     
-    private final TreeList<Point> unoccupied;
-    private final Random random;
+    private static final long serialVersionUID = 2015_03_10_18_20L;
     
+    private final List<Point> unoccupied;    
     private final int[][] core;
+    
     private Piece apple;
     
     public Board(int width, int height) {
         this.core = new int[height][width];
-        this.unoccupied = new TreeList<>();
-        this.random = new Random();
+        this.unoccupied = new ArrayList<>();
         this.apple = new Piece(width/2, height/2);
         this.core[apple.y][apple.x] = 8;
         
@@ -51,7 +50,7 @@ public class Board {
     
     public void placeApple() {
         if (!unoccupied.isEmpty()) {
-            int index = random.nextInt(unoccupied.size());
+            int index = (int) (Math.random() * unoccupied.size());
             Point p = unoccupied.get(index);            
             this.apple = new Piece(p.x, p.y);
         } else {

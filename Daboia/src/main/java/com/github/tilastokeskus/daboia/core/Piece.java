@@ -3,7 +3,9 @@ package com.github.tilastokeskus.daboia.core;
 
 import java.awt.Point;
 
-public class Piece {
+public class Piece implements java.io.Serializable {
+        
+    private static final long serialVersionUID = 2015_03_10_18_18L;
     
     public final int x;
     public final int y;

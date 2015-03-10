@@ -3,34 +3,40 @@ package com.github.tilastokeskus.daboia.core.game;
 
 import com.github.tilastokeskus.daboia.core.Piece;
 import com.github.tilastokeskus.daboia.core.Player;
-import com.github.tilastokeskus.daboia.core.Snake;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameState {
+public class GameState implements java.io.Serializable {
+    
+    private static final long serialVersionUID = 2015_03_10_19_42L;
     
     private final int id;
-    private final Map<Player, Snake> snakes;
-    private final Map<Player, Boolean> aliveStatuses;
-    private final Map<Player, Boolean> shouldDrawStatuses;
+    private final Map<String, Map<Player, Object>> map;
+    
+    private transient GameState next;
+    private transient GameState previous;
     
     private Piece apple;
-    private GameState next;
-    private GameState previous;
+    
+    public GameState(int id) {
+        this(id, null);
+    }
 
-    public GameState(GameState previous) {
-        this.id = (previous == null) ? 1 : previous.id + 1;
-        this.previous = previous;
+    public GameState(int id, GameState state) {
+        this.id = id;
+        this.previous = null;
         this.next = null;
         
-        if (previous != null) {
-            this.snakes = new HashMap<>(previous.snakes);
-            this.aliveStatuses = new HashMap<>(previous.aliveStatuses);
-            this.shouldDrawStatuses = new HashMap<>(previous.shouldDrawStatuses);
+        this.map = new HashMap<>();
+        
+        if (state != null) {
+            map.put("snake", new HashMap<>(state.map.get("snake")));
+            map.put("alive", new HashMap<>(state.map.get("alive")));
+            map.put("shouldDraw", new HashMap<>(state.map.get("shouldDraw")));
         } else {
-            this.snakes = new HashMap<>();
-            this.aliveStatuses = new HashMap<>();
-            this.shouldDrawStatuses = new HashMap<>();
+            map.put("snake", new HashMap<>());
+            map.put("alive", new HashMap<>());
+            map.put("shouldDraw", new HashMap<>());
         }
     }
     
@@ -38,32 +44,22 @@ public class GameState {
         this.apple = apple;
     }
 
-    public void setSnake(Player player, Snake snake) {
-        this.snakes.put(player, snake);
+    public void set(String key, Player player, Object obj) {
+        if (!map.containsKey(key))
+            throw new IllegalArgumentException();
+        map.get(key).put(player, obj);
     }
-
-    public Snake getSnake(Player player) {
-        return this.snakes.get(player);
-    }
-
-    public void setAliveStatus(Player player, boolean alive) {
-        this.aliveStatuses.put(player, alive);
-    }
-
-    public boolean getAliveStatus(Player player) {
-        return this.aliveStatuses.get(player);
-    }
-
-    public void setShouldDrawStatus(Player player, boolean shouldDraw) {
-        this.shouldDrawStatuses.put(player, shouldDraw);
-    }
-
-    public boolean getShouldDrawStatus(Player player) {
-        return this.shouldDrawStatuses.get(player);
+    
+    public Object getValue(String key, Player player) {
+        if (!map.containsKey(key))
+            throw new IllegalArgumentException();
+        if (!map.get(key).containsKey(player))
+            throw new IllegalArgumentException();
+        return map.get(key).get(player);
     }
     
     public int numPlayers() {
-        return this.snakes.size();
+        return map.get("snake").size();
     }
 
     public Piece getApple() {
@@ -80,6 +76,10 @@ public class GameState {
 
     public void setNext(GameState state) {
         this.next = state;
+    }
+
+    public void setPrevious(GameState state) {
+        this.previous = state;
     }
     
     public int getId() {

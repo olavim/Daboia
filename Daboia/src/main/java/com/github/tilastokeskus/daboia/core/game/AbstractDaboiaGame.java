@@ -11,7 +11,8 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     
     protected int numPlayersAlive;
     protected int numMovesNotEaten;
-    protected Board board;    
+    protected Board board;
+    
     private boolean placeApples;
     private boolean gameShouldEnd;
     
