@@ -19,7 +19,7 @@ public class PreviewAction extends AbstractAction {
         GameSettings settings = dialog.showDialog();
         
         if (settings != null) {
-            Main.launchPreview(settings);
+            Main.launchPreview(settings, false);
         }
     }
 }

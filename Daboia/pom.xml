@@ -31,6 +31,12 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.0</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     
     <build>
@@ -66,6 +72,20 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.1.4</version>
+                <configuration>
+                    <targetClasses>
+                        <param>com.github.tilastokeskus.daboia*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>com.github.tilastokeskus.daboia*</param>
+                    </targetTests>
+                </configuration>
             </plugin>
         </plugins>
     </build>

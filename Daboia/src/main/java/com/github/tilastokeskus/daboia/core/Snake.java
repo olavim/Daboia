@@ -73,6 +73,7 @@ public class Snake implements java.io.Serializable {
     public Snake copy() {
         Snake snakeCopy = new Snake();
         snakeCopy.setPieces(this.pieces);
+        snakeCopy.length = length;
         return snakeCopy;
     }
     

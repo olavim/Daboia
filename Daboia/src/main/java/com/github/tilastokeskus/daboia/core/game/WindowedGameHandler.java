@@ -44,7 +44,7 @@ public abstract class WindowedGameHandler extends GameHandler<SavedStateGame> {
         super.stopGame(delay);
         
         /* Set a timer to close the game window after specified delay */
-        Timer timer = new Timer(delay, e -> { getWindow().closeWindow(); });
+        Timer timer = new Timer(delay, e -> getWindow().closeWindow());
         
         timer.setRepeats(false); /* set timer to fire only once */
         timer.start();

@@ -1,6 +1,7 @@
 
 package com.github.tilastokeskus.daboia.core;
 
+import com.github.tilastokeskus.daboia.core.game.DaboiaLogic;
 import com.github.tilastokeskus.daboia.util.ColorFactory;
 import java.awt.Color;
 import java.util.Objects;
@@ -32,6 +33,12 @@ public class Player implements java.io.Serializable {
         this.shouldBeDrawn = true;
     }
     
+    /**
+     * Resets all fields to what they were when an instance of this class was
+     * constructed, with the exception of the snake's color and a possibly set
+     * {@link DaboiaLogic logic handler}, which are not touched.
+     * @see DaboiaLogic
+     */
     public void reset() {
         this.snake = new Snake(initialX, initialY);
         this.shouldBeDrawn = true;
@@ -53,20 +60,6 @@ public class Player implements java.io.Serializable {
     public void setLogicHandler(DaboiaLogic logicHandler) {
         this.logicHandler = logicHandler;
         this.logicHandler.setPlayer(this);
-    }
-    
-    public void setPosition(int x, int y) {
-        
-        /* Setting position not allowed after game has started */
-        if (this.snake.getTrueLength() > 1) {
-        
-            /* The snake's true length (the amount of pieces it consists of)
-             * can never be 1 or less if it has moved at least once.
-             */
-            throw new IllegalStateException("Cannot modify player position while game is running");
-        }
-        
-        this.snake = new Snake(x, y);
     }
     
     public DaboiaLogic getLogicHandler() {
@@ -99,6 +92,16 @@ public class Player implements java.io.Serializable {
     
     public boolean getShouldBeDrawn() {
         return this.shouldBeDrawn;
+    }
+    
+    public Player copy() {
+        Player p = new Player(initialX, initialY, id, name);
+        p.setIsAlive(isAlive);
+        p.setShouldBeDrawn(shouldBeDrawn);
+        p.setSnakeColor(snakeColor);
+        p.setSnake(snake.copy());
+        p.setLogicHandler(logicHandler.clone());
+        return p;
     }
     
     @Override

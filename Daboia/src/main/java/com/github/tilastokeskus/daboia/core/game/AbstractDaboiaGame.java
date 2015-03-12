@@ -1,13 +1,20 @@
 
 package com.github.tilastokeskus.daboia.core.game;
 
+import com.github.tilastokeskus.daboia.core.Board;
+import com.github.tilastokeskus.daboia.core.BoardConstant;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Piece;
 import com.github.tilastokeskus.daboia.core.Player;
 import com.github.tilastokeskus.daboia.core.Snake;
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractDaboiaGame extends DaboiaGame {
+public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializable {
+    
+    protected final List<Player> players;
+    protected int width;
+    protected int height;
     
     protected int numPlayersAlive;
     protected int numMovesNotEaten;
@@ -17,12 +24,41 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     private boolean gameShouldEnd;
     
     public AbstractDaboiaGame(List<Player> players, int width, int height) {
-        super(players, width, height);
+        this.players = players;
+        this.width = width;
+        this.height = height;
         this.numPlayersAlive = players.size();
         this.numMovesNotEaten = 0;
         this.board = new Board(width, height);
         this.placeApples = true;
         this.gameShouldEnd = false;
+    }
+    
+    @Override
+    public int numPlayers() {
+        return this.players.size();
+    }
+    
+    @Override
+    public List<Player> getPlayers() {
+        return new ArrayList<>(players);
+    }
+    
+    @Override
+    public int getWidth() {
+        return this.width;
+    }
+    
+    @Override
+    public int getHeight() {
+        return this.height;
+    }
+    
+    @Override
+    public void sendKeyInput(char c) {
+        for (Player player : this.players) {
+            player.getLogicHandler().sendKey(c);
+        }
     }
     
     @Override
@@ -49,7 +85,7 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     }
     
     @Override
-    public int[][] getBoard() {
+    public BoardConstant[][] getBoard() {
         return this.board.getCore();
     }
     
@@ -119,14 +155,14 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     }
     
     protected void moveSnake(Snake snake, Direction direction) {
-        board.set(snake.getHead().x, snake.getHead().y, BoardConstants.SNAKE_BODY);
-        board.set(snake.getTail().x, snake.getTail().y, BoardConstants.FLOOR);
+        board.set(snake.getHead().x, snake.getHead().y, BoardConstant.SNAKE_BODY);
+        board.set(snake.getTail().x, snake.getTail().y, BoardConstant.FLOOR);
         
         snake.move(direction);
         numMovesNotEaten++;
         
-        board.set(snake.getHead().x, snake.getHead().y, BoardConstants.SNAKE_HEAD);
-        board.set(snake.getTail().x, snake.getTail().y, BoardConstants.SNAKE_BODY);
+        board.set(snake.getHead().x, snake.getHead().y, BoardConstant.SNAKE_HEAD);
+        board.set(snake.getTail().x, snake.getTail().y, BoardConstant.SNAKE_BODY);
     }
     
     protected void checkIfAppleEaten(Snake snake) {
@@ -139,7 +175,7 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
     
     private void placeApple() {
         if (this.placeApples)
-            board.placeApple();
+            board.randomlyPlaceApple();
     }
     
     protected void handlePlayerDeath(Player player) {
@@ -147,7 +183,7 @@ public abstract class AbstractDaboiaGame extends DaboiaGame {
         numPlayersAlive--;
         
         for (Piece piece : player.getSnake().getPieces())
-            board.set(piece.x, piece.y, BoardConstants.FLOOR);
+            board.set(piece.x, piece.y, BoardConstant.FLOOR);
         
         if (numPlayers() > 1 && numPlayersAlive > 1)
             player.setShouldBeDrawn(false);

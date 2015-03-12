@@ -33,15 +33,15 @@ public abstract class GameHandler<T extends DaboiaGame> extends Observable {
     }
     
     public Collection<Player> getRegisteredPlayers() {
-        return game.players;
+        return game.getPlayers();
     }
     
     public int getRegisteredWidth() {
-        return game.width;
+        return game.getWidth();
     }
     
     public int getRegisteredHeight() {
-        return game.height;
+        return game.getHeight();
     }
     
     public T getRegisteredGame() {
@@ -50,7 +50,6 @@ public abstract class GameHandler<T extends DaboiaGame> extends Observable {
     
     public void startGame(int refreshrate) {
         Runnable roundCmd = () -> {
-            if (isPaused) return;
             
             /* Runnable swallows exceptions, thus we wrap the function in a
              * try-catch
@@ -91,6 +90,10 @@ public abstract class GameHandler<T extends DaboiaGame> extends Observable {
     
     public void setPaused(boolean paused) {
         this.isPaused = paused;
+    }
+    
+    public boolean isPaused() {
+        return this.isPaused;
     }
     
     protected abstract void playRound();

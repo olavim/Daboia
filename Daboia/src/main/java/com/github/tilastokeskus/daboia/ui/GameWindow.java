@@ -19,7 +19,6 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;

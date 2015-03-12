@@ -1,7 +1,7 @@
 
 package com.github.tilastokeskus.daboia.ui;
 
-import com.github.tilastokeskus.daboia.core.DaboiaLogic;
+import com.github.tilastokeskus.daboia.core.game.DaboiaLogic;
 import com.github.tilastokeskus.daboia.core.Player;
 import com.github.tilastokeskus.daboia.plugin.PluginManager;
 import com.github.tilastokeskus.daboia.util.Pair;

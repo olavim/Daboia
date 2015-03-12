@@ -15,6 +15,8 @@ public class GameStatePlayer extends ControllableWindowedGameHandler {
         if (this.game.shouldBeTerminated())
             this.stopGame(0);
         
+        if (this.isPaused()) return;
+        
         /* set the game's state to represent the "next" moment */
         boolean nextStateExists = this.game.nextState();
         

@@ -11,9 +11,7 @@ import com.github.tilastokeskus.daboia.core.game.SavedStateGame;
 import com.github.tilastokeskus.daboia.ui.MainWindow;
 import com.github.tilastokeskus.daboia.plugin.PluginManager;
 import com.github.tilastokeskus.daboia.util.ReplayUtils;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,9 +33,6 @@ public class Main {
         
         PluginManager.loadPlugins();
         showMainInterface();
-        
-        SavedStateGame game = ReplayUtils.loadReplay("daboia.ser");        
-        launchPreloadedGame(game, 50);
     }
     
     public static MainWindow getMainInterface() {
@@ -49,7 +44,7 @@ public class Main {
         mainInterface.showWindow();
     }
     
-    public static void launchPreview(GameSettings settings) {
+    public static void launchPreview(GameSettings settings, boolean savePreview) {
         List<Player> players = settings.getPlayers();
         int width = settings.getWidth();
         int height = settings.getHeight();
@@ -59,6 +54,16 @@ public class Main {
             SavedStateGame game = new SavedStateGame(players, width, height);
             GamePreloader preloader = new GamePreloader(game);
             preloader.preload();
+            
+            if (savePreview) {
+                try {
+                    String replayName = ReplayUtils.getReplayName();
+                    ReplayUtils.saveReplay(game, replayName);
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+            
             launchPreloadedGame(game, refreshrate);
         } catch (IllegalArgumentException ex) {
             System.err.println("Could not launch game: " + ex.getMessage());
@@ -67,7 +72,7 @@ public class Main {
     }
     
     private static void launchPreloadedGame(SavedStateGame game, int refreshrate) {
-        ControllableWindowedGameHandler handler = new GameStatePlayer(game);
+        GameStatePlayer handler = new GameStatePlayer(game);
         handler.setController(new GameHandlerController(handler));
 
         /* framerate must be at least 1 */

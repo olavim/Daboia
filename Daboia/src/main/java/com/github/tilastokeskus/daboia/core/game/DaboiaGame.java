@@ -1,45 +1,40 @@
 
 package com.github.tilastokeskus.daboia.core.game;
 
+import com.github.tilastokeskus.daboia.core.BoardConstant;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Piece;
 import com.github.tilastokeskus.daboia.core.Player;
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DaboiaGame implements java.io.Serializable {
+public interface DaboiaGame {
     
-    protected final List<Player> players;
-    protected int width;
-    protected int height;
-
-    public DaboiaGame(List<Player> players, int width, int height) {
-        this.players = players;
-        this.width = width;
-        this.height = height;
-    }
+    /**
+     * Returns the number of players present in the game.
+     * @return Number of players in the game.
+     */
+    int numPlayers();
     
-    public int numPlayers() {
-        return this.players.size();
-    }
+    /**
+     * Returns a list of all the players present in the game.
+     * @return  List of Players.
+     * @see     Player
+     */
+    List<Player> getPlayers();
     
-    public List<Player> getPlayers() {
-        return new ArrayList<>(players);
-    }
+    /**
+     * Returns the number of cells the game area has horizontally.
+     * @return Width of the game area - number of horizontal cells.
+     */
+    int getWidth();
     
-    public int getWidth() {
-        return this.width;
-    }
+    /**
+     * Returns the number of cells the game area has vertically.
+     * @return Height of the game area - number of vertical cells.
+     */
+    int getHeight();
     
-    public int getHeight() {
-        return this.height;
-    }
-    
-    public void sendKeyInput(char c) {
-        for (Player player : this.players) {
-            player.getLogicHandler().sendKey(c);
-        }
-    }
+    void sendKeyInput(char c);
     
     /**
      * Resets the game to its initial state. That is, the state that was in
@@ -120,21 +115,13 @@ public abstract class DaboiaGame implements java.io.Serializable {
     public abstract Piece getApple();
     
     /**
-     * Returns an integer matrix representing the current state of the game.
-     * Values in the matrix should obey the values specified in
-     * {@link BoardConstants}, though it is not mandatory.
-     * <ul>
-     *     <li>0 indicates an unoccupied cell.</li>
-     *     <li>-1 indicates the body of a snake.</li>
-     *     <li>-2 indicates the head of a snake.</li>
-     *     <li>8 indicates an apple.</li>
-     * </ul>
+     * Returns a BoardConstant matrix representing the current state of the game.
      * 
-     * @return  A 2-dimensional integer matrix representing the current state of
-     *          the game.
-     * @see  BoardConstants
+     * @return  A 2-dimensional BoardConstant matrix representing the current
+     *          state of the game.
+     * @see  BoardConstant
      */
-    public abstract int[][] getBoard();
+    public abstract BoardConstant[][] getBoard();
     
     /**
      * Returns the amount of cells that have nothing in them, that is, the
