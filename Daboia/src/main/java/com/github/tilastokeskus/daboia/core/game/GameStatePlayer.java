@@ -13,7 +13,7 @@ public class GameStatePlayer extends ControllableWindowedGameHandler {
         
         /* if the game is requesting termination, terminate it immediately */
         if (this.game.shouldBeTerminated())
-            this.stopGame(0);
+            this.stopGame();
         
         if (this.isPaused()) return;
         

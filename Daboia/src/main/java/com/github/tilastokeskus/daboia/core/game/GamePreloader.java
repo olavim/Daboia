@@ -1,6 +1,7 @@
 
 package com.github.tilastokeskus.daboia.core.game;
 
+import com.github.tilastokeskus.daboia.core.game.ai.DaboiaLogic;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Player;
 

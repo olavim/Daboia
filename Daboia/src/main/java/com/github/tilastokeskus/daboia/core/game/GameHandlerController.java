@@ -5,9 +5,9 @@ import com.github.tilastokeskus.daboia.util.Command;
 
 public class GameHandlerController {
     
-    private final GameHandler<SavedStateGame> gameHandler;
+    private final AbstractGameHandler<SavedStateGame> gameHandler;
     
-    public GameHandlerController(GameHandler<SavedStateGame> gameHandler) {
+    public GameHandlerController(AbstractGameHandler<SavedStateGame> gameHandler) {
         this.gameHandler = gameHandler;
     }
     

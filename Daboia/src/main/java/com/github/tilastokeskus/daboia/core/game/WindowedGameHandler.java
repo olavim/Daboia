@@ -4,7 +4,7 @@ package com.github.tilastokeskus.daboia.core.game;
 import com.github.tilastokeskus.daboia.ui.GameWindow;
 import javax.swing.Timer;
 
-public abstract class WindowedGameHandler extends GameHandler<SavedStateGame> {
+public abstract class WindowedGameHandler extends AbstractGameHandler<SavedStateGame> {
     
     protected GameWindow window;
 
@@ -40,8 +40,12 @@ public abstract class WindowedGameHandler extends GameHandler<SavedStateGame> {
     }
     
     @Override
+    public void stopGame() {
+        this.stopGame(0);
+    }
+    
     public void stopGame(int delay) {
-        super.stopGame(delay);
+        super.stopGame();
         
         /* Set a timer to close the game window after specified delay */
         Timer timer = new Timer(delay, e -> getWindow().closeWindow());

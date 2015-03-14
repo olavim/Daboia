@@ -1,8 +1,8 @@
 
 package com.github.tilastokeskus.daboia.core.game;
 
-import com.github.tilastokeskus.daboia.core.Board;
 import com.github.tilastokeskus.daboia.core.BoardConstant;
+import com.github.tilastokeskus.daboia.core.CoreBoard;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Piece;
 import com.github.tilastokeskus.daboia.core.Player;
@@ -18,7 +18,7 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
     
     protected int numPlayersAlive;
     protected int numMovesNotEaten;
-    protected Board board;
+    protected CoreBoard board;
     
     private boolean placeApples;
     private boolean gameShouldEnd;
@@ -29,7 +29,7 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
         this.height = height;
         this.numPlayersAlive = players.size();
         this.numMovesNotEaten = 0;
-        this.board = new Board(width, height);
+        this.board = new CoreBoard(width, height);
         this.placeApples = true;
         this.gameShouldEnd = false;
     }
@@ -65,7 +65,7 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
     public void reset() {
         this.numPlayersAlive = players.size();
         this.numMovesNotEaten = 0;
-        this.board = new Board(width, height);        
+        this.board = new CoreBoard(width, height);        
         players.forEach(Player::reset);
     }
     
@@ -86,7 +86,7 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
     
     @Override
     public BoardConstant[][] getBoard() {
-        return this.board.getCore();
+        return this.board.getMatrix();
     }
     
     @Override

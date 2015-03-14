@@ -7,11 +7,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class BoardTest {
+public class CoreBoardTest {
     
-    private Board board;
+    private CoreBoard board;
     
-    public BoardTest() {
+    public CoreBoardTest() {
     }
     
     @BeforeClass
@@ -24,7 +24,7 @@ public class BoardTest {
     
     @Before
     public void setUp() {
-        board = new Board(20, 20);
+        board = new CoreBoard(20, 20);
     }
     
     @After
@@ -38,16 +38,16 @@ public class BoardTest {
     
     @Test
     public void constructor_boardCore_shouldInitAppleToMiddle() {
-        assertTrue(board.getCore()[10][10] == BoardConstant.APPLE);
+        assertTrue(board.getMatrix()[10][10] == BoardConstant.APPLE);
     }
     
     @Test
     public void method_set_shouldSetDataToCore() {
         for (int i = 0; i < 20; i++)
             for (int j = 0; j < 20; j++) {
-                assertFalse(board.get(i, j) == BoardConstant.SNAKE_HEAD);
-                board.set(i, j, BoardConstant.SNAKE_HEAD);
-                assertTrue(board.get(i, j) == BoardConstant.SNAKE_HEAD);
+                assertFalse(board.getMatrix()[i][j] == BoardConstant.SNAKE_HEAD);
+                board.set(j, i, BoardConstant.SNAKE_HEAD);
+                assertTrue(board.getMatrix()[i][j] == BoardConstant.SNAKE_HEAD);
             }
     }
     

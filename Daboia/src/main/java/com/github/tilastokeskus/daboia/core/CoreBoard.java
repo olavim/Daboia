@@ -4,7 +4,7 @@ package com.github.tilastokeskus.daboia.core;
 import java.awt.Point;
 import java.util.*;
 
-public class Board implements java.io.Serializable {
+public class CoreBoard implements java.io.Serializable {
     
     private static final long serialVersionUID = 2015_03_10_18_20L;
     
@@ -13,16 +13,12 @@ public class Board implements java.io.Serializable {
     
     private Piece apple;
     
-    public Board(int width, int height) {
+    public CoreBoard(int width, int height) {
         this.core = new BoardConstant[height][width];
         this.unoccupied = new HashSet<>();
         this.apple = new Piece(width/2, height/2);
         
         initCore(height, width);
-    }
-    
-    public BoardConstant get(int x, int y) {
-        return this.core[y][x];
     }
     
     public void set(int x, int y, BoardConstant data) {
@@ -45,11 +41,7 @@ public class Board implements java.io.Serializable {
     
     public void randomlyPlaceApple() {
         if (!unoccupied.isEmpty()) {
-            int index = (int) (Math.random() * unoccupied.size());
-            Iterator<Point> iter = unoccupied.iterator();
-            while (index-- > 0) iter.next();
-            Point p = iter.next();
-            
+            Point p = getRandomUnoccupiedPoint();            
             this.apple = new Piece(p.x, p.y);
         } else {
             this.apple = null;
@@ -72,15 +64,17 @@ public class Board implements java.io.Serializable {
         return this.unoccupied.size();
     }
     
-    public BoardConstant[][] getCore() {
-        BoardConstant[][] corecpy = new BoardConstant[getHeight()][getWidth()];
-        for (int i = 0; i < corecpy.length; i++) {
-            System.arraycopy(core[i], 0, corecpy[i], 0, corecpy[i].length);
-        }
-        
-        return corecpy;
+    public BoardConstant[][] getMatrix() {        
+        return core;
     }
 
+    private Point getRandomUnoccupiedPoint() {
+        int index = (int) (Math.random() * unoccupied.size());
+        Iterator<Point> iter = unoccupied.iterator();
+        while (index-- > 0) iter.next();
+        return iter.next();
+    }
+    
     private void initCore(int height, int width) {
         for (int y = 0; y < height; y++) {
             Arrays.fill(core[y], BoardConstant.FLOOR);

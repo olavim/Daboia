@@ -1,7 +1,7 @@
 
 package com.github.tilastokeskus.daboia.core;
 
-import com.github.tilastokeskus.daboia.core.game.DaboiaLogic;
+import com.github.tilastokeskus.daboia.core.game.ai.DaboiaLogic;
 import com.github.tilastokeskus.daboia.util.ColorFactory;
 import java.awt.Color;
 import java.util.Objects;

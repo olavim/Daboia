@@ -1,9 +1,11 @@
-package com.github.tilastokeskus.daboia.core.game;
+package com.github.tilastokeskus.daboia.core.game.ai;
  
 import com.github.tilastokeskus.daboia.Main;
 import com.github.tilastokeskus.daboia.core.BoardConstant;
 import com.github.tilastokeskus.daboia.core.Piece;
 import com.github.tilastokeskus.daboia.core.Player;
+import com.github.tilastokeskus.daboia.core.game.DaboiaGame;
+import com.github.tilastokeskus.daboia.core.game.GameSettings;
 import com.github.tilastokeskus.daboia.util.ClassUtils;
 import java.util.Arrays;
 import java.util.List;
@@ -115,11 +117,12 @@ public abstract class DaboiaLogic implements Cloneable {
      * game. The board is vertically indiced - that is,
      * <pre>board[y][x]</pre>
      * returns the <code>x</code>th column from the <code>y</code>th row.
+     * 
      * @return  A 2-dimensional {@link BoardConstant} representing the game's
      *          current situation.
      */
-    public BoardConstant[][] getGameBoard() {
-        return daboiaGame.getBoard();
+    public Board getGameBoard() {
+        return new Board(daboiaGame.getBoard());
     }
     
     /**

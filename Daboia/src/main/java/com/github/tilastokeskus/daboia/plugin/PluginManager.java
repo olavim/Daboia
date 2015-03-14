@@ -3,7 +3,7 @@ package com.github.tilastokeskus.daboia.plugin;
 
 import java.util.ArrayList;
 import java.util.jar.Attributes;
-import com.github.tilastokeskus.daboia.core.game.DaboiaLogic;
+import com.github.tilastokeskus.daboia.core.game.ai.DaboiaLogic;
 import com.github.tilastokeskus.daboia.util.Pair;
 import java.util.List;
 

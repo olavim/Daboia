@@ -40,7 +40,7 @@ public interface DaboiaGame {
      * Resets the game to its initial state. That is, the state that was in
      * effect after the constructor was called.
      */
-    public abstract void reset();
+    void reset();
     
     /**
      * Moves the player. By default, implementations of this method should
@@ -61,7 +61,7 @@ public interface DaboiaGame {
      * @param player     The player who should be moved.
      * @param direction  The direction in which the player should move.
      */
-    public abstract void makeMove(Player player, Direction direction);
+    void makeMove(Player player, Direction direction);
     
     /**
      * Returns whether the game is over or not. A game should be over if:
@@ -86,7 +86,7 @@ public interface DaboiaGame {
      * @return  true if at least one of the above points is fulfilled, otherwise
      *          false.
      */
-    public abstract boolean isGameOver();
+    boolean isGameOver();
     
     /**
      * Specify whether or not an apple should be automatically placed in a
@@ -97,7 +97,7 @@ public interface DaboiaGame {
      * @param enable  true if apples should be automatically placed, false if
      *                not.
      */
-    public abstract void enableApples(boolean enable);
+    void enableApples(boolean enable);
     
     /**
      * Manually set an apple. The position of the apple should be defined by the
@@ -105,14 +105,14 @@ public interface DaboiaGame {
      * 
      * @param newApple  A {@link Piece} object representing the apple.
      */
-    public abstract void setApple(Piece newApple);
+    void setApple(Piece newApple);
     
     /**
      * Returns the apple that is currently effective on the board.
      * 
      * @return  A {@link Piece} object representing the apple.
      */
-    public abstract Piece getApple();
+    Piece getApple();
     
     /**
      * Returns a BoardConstant matrix representing the current state of the game.
@@ -121,7 +121,7 @@ public interface DaboiaGame {
      *          state of the game.
      * @see  BoardConstant
      */
-    public abstract BoardConstant[][] getBoard();
+    BoardConstant[][] getBoard();
     
     /**
      * Returns the amount of cells that have nothing in them, that is, the
@@ -130,7 +130,7 @@ public interface DaboiaGame {
      * 
      * @return An integer from 0 to the game's area (width * height).
      */
-    public abstract int numUnoccupied();
+    int numUnoccupied();
     
     /**
      * Returns the amount of players that have not been killed - players that
@@ -140,7 +140,7 @@ public interface DaboiaGame {
      * @return An integer from 0 to the amount of players participating in the
      *         game.
      */
-    public abstract int numPlayersAlive();
+    int numPlayersAlive();
     
     /**
      * Sets a flag suggesting that the game should be terminated as soon as
@@ -153,7 +153,7 @@ public interface DaboiaGame {
      * 
      * @see shouldBeTerminated
      */
-    public abstract void terminateGame();
+    void terminateGame();
     
     /**
      * Tells any inquirers whether or not the game should be terminated. The
@@ -163,6 +163,6 @@ public interface DaboiaGame {
      * @return true or false
      * @see terminateGame
      */
-    public abstract boolean shouldBeTerminated();
+    boolean shouldBeTerminated();
     
 }
