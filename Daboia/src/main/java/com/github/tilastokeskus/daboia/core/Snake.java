@@ -3,6 +3,7 @@ package com.github.tilastokeskus.daboia.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Snake implements java.io.Serializable {
     
@@ -54,16 +55,11 @@ public class Snake implements java.io.Serializable {
     }
     
     public boolean collidesWith(Snake otherSnake) {
-        if (otherSnake == this) {
-            return this.doesCollideWithItself();
-        }
+        if (otherSnake == this)
+            return this.collidesWithItself();
         
         return otherSnake.getPieces().stream()
                 .anyMatch(p -> this.collidesWith(p));
-    }
-    
-    public boolean doesCollideWithItself() {
-        return this.collidesWith(getHead());
     }
     
     public void setPieces(List<Piece> pieces) {
@@ -72,7 +68,9 @@ public class Snake implements java.io.Serializable {
     
     public Snake copy() {
         Snake snakeCopy = new Snake();
-        snakeCopy.setPieces(this.pieces);
+        snakeCopy.setPieces(pieces.stream()
+                .map(piece -> new Piece(piece))
+                .collect(Collectors.toList()));
         snakeCopy.length = length;
         return snakeCopy;
     }
@@ -95,6 +93,10 @@ public class Snake implements java.io.Serializable {
      */
     public int getTrueLength() {
         return this.pieces.size();
+    }
+    
+    private boolean collidesWithItself() {
+        return this.collidesWith(getHead());
     }
     
     @Override

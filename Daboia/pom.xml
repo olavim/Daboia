@@ -80,8 +80,21 @@
                 <version>1.1.4</version>
                 <configuration>
                     <targetClasses>
-                        <param>com.github.tilastokeskus.daboia*</param>
+                        <param>com.github.tilastokeskus.daboia.core*</param>
                     </targetClasses>
+                    <excludedClasses>
+                        <param>com.github.tilastokeskus.daboia.core.BoardConstant</param>
+                        <param>com.github.tilastokeskus.daboia.core.Direction</param>
+                        <param>com.github.tilastokeskus.daboia.core.Piece</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.AbstractDaboiaGame</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.AbstractGameHandler</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.ControllableWindowedGameHandler</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.DaboiaGame</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.GameHandler</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.StateSaver</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.WindowedGameHandler</param>
+                        <param>com.github.tilastokeskus.daboia.core.game.ai*</param>
+                    </excludedClasses>
                     <targetTests>
                         <param>com.github.tilastokeskus.daboia*</param>
                     </targetTests>

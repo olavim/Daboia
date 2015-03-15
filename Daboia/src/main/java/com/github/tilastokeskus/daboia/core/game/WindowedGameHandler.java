@@ -44,6 +44,10 @@ public abstract class WindowedGameHandler extends AbstractGameHandler<SavedState
         this.stopGame(0);
     }
     
+    /**
+     * Stops and shuts down the running game.
+     * @param delay Time to wait, in milliseconds, until the window is closed.
+     */
     public void stopGame(int delay) {
         super.stopGame();
         

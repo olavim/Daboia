@@ -3,6 +3,7 @@ package com.github.tilastokeskus.daboia.core;
 
 import java.awt.Point;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class CoreBoard implements java.io.Serializable {
     
@@ -76,11 +77,10 @@ public class CoreBoard implements java.io.Serializable {
     }
     
     private void initCore(int height, int width) {
-        for (int y = 0; y < height; y++) {
+        IntStream.range(0, height).forEach(y -> {
             Arrays.fill(core[y], BoardConstant.FLOOR);
-            for (int x = 0; x < width; x++)
-                unoccupied.add(new Point(x, y));
-        }
+            IntStream.range(0, width).forEach(x -> unoccupied.add(new Point(x, y)));
+        });
         
         this.core[apple.y][apple.x] = BoardConstant.APPLE;
     }

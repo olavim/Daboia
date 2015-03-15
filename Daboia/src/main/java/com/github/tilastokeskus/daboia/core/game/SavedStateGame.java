@@ -34,6 +34,9 @@ public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
      * <p>
      * {@link #startNextState() startNextState} should be called after all
      * alive players have moved once, or in other words, after each round.
+     * 
+     * @param player    Player to move.
+     * @param direction Direction to move the player into.
      */
     @Override
     public void makeMove(Player player, Direction direction) {
