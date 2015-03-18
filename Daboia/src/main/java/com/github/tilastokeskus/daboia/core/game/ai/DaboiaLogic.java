@@ -85,7 +85,7 @@ public abstract class DaboiaLogic implements Cloneable {
     }
     
     /**
-     * Returns the player this logic handler is controlling.
+     * Returns a copy of the player this logic handler is controlling.
      * @return A Player that is controlled by this handler.
      */
     public final Player getPlayer() {

@@ -5,13 +5,11 @@ public class GameStatePlayer extends ControllableWindowedGameHandler {
     
     public GameStatePlayer(SavedStateGame game) {
         super(game);
-        game.enableApples(false);
     }
 
     @Override
     protected void playRound() {
         
-        /* if the game is requesting termination, terminate it immediately */
         if (this.game.shouldBeTerminated())
             this.stopGame();
         
@@ -21,8 +19,6 @@ public class GameStatePlayer extends ControllableWindowedGameHandler {
         boolean nextStateExists = this.game.nextState();
         
         if (!nextStateExists) {
-            
-            /* if there was no next moment, the game has ended */
             this.setPaused(true);
         }        
     }

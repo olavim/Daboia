@@ -143,6 +143,19 @@ public class SnakeTest {
         assertTrue("List of pieces should be cloned", onlyEquals(s.getPieces(), snake.getPieces()));
         assertEquals("Lengths should be same", s.getLength(), snake.getLength());
     }
+
+    @Test (timeout = 1000)
+    public void method_copy_shouldReturnCopyFast() {
+        
+        /* A maximum-size snake in 40x40 board */
+        for (int i = 0; i < 1600; i++) {
+            snake.grow();
+            snake.move(Direction.RIGHT);
+        }
+        
+        for (int i = 0; i < 10000; i++)
+            snake.copy();
+    }
     
     private boolean onlyEquals(Object o1, Object o2) {
         if (o1 == null || o2 == null) return false;

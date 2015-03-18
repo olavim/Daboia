@@ -6,7 +6,7 @@ import com.github.tilastokeskus.daboia.core.Player;
 import com.github.tilastokeskus.daboia.core.Snake;
 import java.util.List;
 
-public class SavedStateGame extends AbstractDaboiaGame implements StateSaver {
+public class SavedStateGame extends DefaultDaboiaGame implements StateSaver {
     
     private static final long serialVersionUID = 2015_03_10_19_43L;
     

@@ -34,8 +34,6 @@ public interface DaboiaGame {
      */
     int getHeight();
     
-    void sendKeyInput(char c);
-    
     /**
      * Resets the game to its initial state. That is, the state that was in
      * effect after the constructor was called.
@@ -97,7 +95,7 @@ public interface DaboiaGame {
      * @param enable  true if apples should be automatically placed, false if
      *                not.
      */
-    void enableApples(boolean enable);
+//    void enableApples(boolean enable);
     
     /**
      * Manually set an apple. The position of the apple should be defined by the

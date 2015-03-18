@@ -10,6 +10,10 @@ import com.github.tilastokeskus.daboia.core.Snake;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provides a skeletal implementation for {@link DaboiaGame} to minimize the
+ * effort required to implement this interface.
+ */
 public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializable {
     
     protected final List<Player> players;
@@ -17,10 +21,8 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
     protected int height;
     
     protected int numPlayersAlive;
-    protected int numMovesNotEaten;
     protected CoreBoard board;
     
-    private boolean placeApples;
     private boolean gameShouldEnd;
     
     public AbstractDaboiaGame(List<Player> players, int width, int height) {
@@ -28,9 +30,7 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
         this.width = width;
         this.height = height;
         this.numPlayersAlive = players.size();
-        this.numMovesNotEaten = 0;
         this.board = new CoreBoard(width, height);
-        this.placeApples = true;
         this.gameShouldEnd = false;
     }
     
@@ -55,23 +55,10 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
     }
     
     @Override
-    public void sendKeyInput(char c) {
-        for (Player player : this.players) {
-            player.getLogicHandler().sendKey(c);
-        }
-    }
-    
-    @Override
     public void reset() {
         this.numPlayersAlive = players.size();
-        this.numMovesNotEaten = 0;
         this.board = new CoreBoard(width, height);        
         players.forEach(Player::reset);
-    }
-    
-    @Override
-    public void enableApples(boolean enable) {
-        this.placeApples = enable;
     }
     
     @Override
@@ -92,7 +79,7 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
     @Override
     public void makeMove(Player player, Direction direction) {
         moveSnake(player.getSnake(), direction);
-        checkIfAppleEaten(player.getSnake());
+        checkIfAppleEaten(player);
         
         if (playerShouldDie(player))
             handlePlayerDeath(player);
@@ -100,8 +87,7 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
     
     @Override
     public boolean isGameOver() {
-        return isInfiniteGame()
-               || board.numUnoccupied() == 0
+        return board.numUnoccupied() == 0
                || numPlayersAlive == 0
                || (numPlayers() > 1 && numPlayersAlive < 2);
     }
@@ -126,13 +112,25 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
         return this.gameShouldEnd;
     }
     
-    /**
-     * Check if the game has been running for too long without an apple being eaten.
-     * @return   true or false.
-     */
-    private boolean isInfiniteGame() {
-        int area = this.board.getWidth() * this.board.getHeight();
-        return this.numMovesNotEaten > this.numPlayersAlive * area * 3;
+    protected void moveSnake(Snake snake, Direction direction) {
+        board.set(snake.getHead().x, snake.getHead().y, BoardConstant.SNAKE_BODY);
+        board.set(snake.getTail().x, snake.getTail().y, BoardConstant.FLOOR);
+        
+        snake.move(direction);
+        
+        board.set(snake.getHead().x, snake.getHead().y, BoardConstant.SNAKE_HEAD);
+        board.set(snake.getTail().x, snake.getTail().y, BoardConstant.SNAKE_BODY);
+    }
+    
+    protected void handlePlayerDeath(Player player) {
+        player.setIsAlive(false);
+        numPlayersAlive--;
+        
+        for (Piece piece : player.getSnake().getPieces())
+            board.set(piece.x, piece.y, BoardConstant.FLOOR);
+        
+        if (numPlayers() > 1 && numPlayersAlive > 1)
+            player.setShouldBeDrawn(false);
     }
     
     private boolean playerShouldDie(Player player) {        
@@ -154,39 +152,16 @@ public abstract class AbstractDaboiaGame implements DaboiaGame, java.io.Serializ
                 .anyMatch(p -> playerSnake.collidesWith(p.getSnake()));
     }
     
-    protected void moveSnake(Snake snake, Direction direction) {
-        board.set(snake.getHead().x, snake.getHead().y, BoardConstant.SNAKE_BODY);
-        board.set(snake.getTail().x, snake.getTail().y, BoardConstant.FLOOR);
-        
-        snake.move(direction);
-        numMovesNotEaten++;
-        
-        board.set(snake.getHead().x, snake.getHead().y, BoardConstant.SNAKE_HEAD);
-        board.set(snake.getTail().x, snake.getTail().y, BoardConstant.SNAKE_BODY);
-    }
-    
-    protected void checkIfAppleEaten(Snake snake) {
-        if (snake.collidesWith(this.getApple())) {
-            snake.grow();
-            placeApple();
-            numMovesNotEaten = 0;
+    private void checkIfAppleEaten(Player player) {
+        if (player.getSnake().collidesWith(this.getApple())) {
+            handleAppleEaten(player);
         }
     }
     
-    private void placeApple() {
-        if (this.placeApples)
-            board.randomlyPlaceApple();
-    }
-    
-    protected void handlePlayerDeath(Player player) {
-        player.setIsAlive(false);
-        numPlayersAlive--;
-        
-        for (Piece piece : player.getSnake().getPieces())
-            board.set(piece.x, piece.y, BoardConstant.FLOOR);
-        
-        if (numPlayers() > 1 && numPlayersAlive > 1)
-            player.setShouldBeDrawn(false);
-    }
+    /**
+     * Defines what happens when a player eats the apple.
+     * @param player The player who ate the apple.
+     */
+    protected abstract void handleAppleEaten(Player player);
 
 }

@@ -3,9 +3,10 @@ package com.github.tilastokeskus.daboia.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Snake implements java.io.Serializable {
+public class Snake implements Cloneable, java.io.Serializable {
     
     private static final long serialVersionUID = 2015_03_10_18_16L;
     
@@ -102,6 +103,24 @@ public class Snake implements java.io.Serializable {
     @Override
     public String toString() {
         return "length: " + this.length + "\nhead: " + this.getHead();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Snake other = (Snake) obj;
+        return pieces.equals(other.pieces) && this.length == other.length;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.pieces);
+        hash = 47 * hash + this.length;
+        return hash;
     }
 
 }

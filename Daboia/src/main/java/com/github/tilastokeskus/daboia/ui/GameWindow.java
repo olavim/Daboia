@@ -132,13 +132,6 @@ public class GameWindow implements GUI, Observer {
                 game.terminateGame();
             }
         });
-        
-        window.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                game.sendKeyInput(e.getKeyChar());
-            }
-        });
 
         if (this.controller != null) {
             stateSlider.addChangeListener(

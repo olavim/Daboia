@@ -23,13 +23,14 @@ public class Player implements java.io.Serializable {
     private boolean shouldBeDrawn;
     
     public Player(int initialX, int initialY, int id, String name) {
-        this.snake = new Snake(initialX, initialY);
-        this.id = id;
         this.initialX = initialX;
         this.initialY = initialY;
-        this.isAlive = true;
-        this.snakeColor = ColorFactory.getNextColor();
+        this.id = id;
         this.name = name;
+        this.snake = new Snake(initialX, initialY);
+        
+        this.snakeColor = ColorFactory.getNextColor();
+        this.isAlive = true;
         this.shouldBeDrawn = true;
     }
     
@@ -100,7 +101,10 @@ public class Player implements java.io.Serializable {
         p.setShouldBeDrawn(shouldBeDrawn);
         p.setSnakeColor(snakeColor);
         p.setSnake(snake.copy());
-        p.setLogicHandler(logicHandler.clone());
+        
+        if (this.logicHandler != null)
+            p.setLogicHandler(logicHandler.clone());
+        
         return p;
     }
     
@@ -111,21 +115,35 @@ public class Player implements java.io.Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        
-        if (getClass() != obj.getClass())
-            return false;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         
         final Player other = (Player) obj;
-        return this.id == other.id && this.name.equals(other.name);
+        if (id != other.id
+                || !Objects.equals(name, other.name)
+                || !Objects.equals(logicHandler, other.logicHandler)
+                || !Objects.equals(snake, other.snake)
+                || !Objects.equals(snakeColor, other.snakeColor)
+                || initialX != other.initialX
+                || initialY != other.initialY
+                || isAlive != other.isAlive
+                || shouldBeDrawn != other.shouldBeDrawn)
+            return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + this.id;
-        hash = 29 * hash + Objects.hashCode(this.name);
+        int hash = 5;
+        hash = 53 * hash + this.id;
+        hash = 53 * hash + Objects.hashCode(this.name);
+        hash = 53 * hash + this.initialX;
+        hash = 53 * hash + this.initialY;
+        hash = 53 * hash + Objects.hashCode(this.logicHandler);
+        hash = 53 * hash + Objects.hashCode(this.snake);
+        hash = 53 * hash + Objects.hashCode(this.snakeColor);
+        hash = 53 * hash + (this.isAlive ? 1 : 0);
+        hash = 53 * hash + (this.shouldBeDrawn ? 1 : 0);
         return hash;
     }
 
