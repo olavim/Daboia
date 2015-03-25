@@ -15,9 +15,13 @@ The game is written in Java 8. The source code is wrapped inside a NetBeans-proj
 
 ### Version history
 
-##### Current Version (0.0.9)
+##### Current Version (0.1b)
 
-As of now, the game consists of a functional local single- and multiplayer. ~~That being said, the GUI is only *nearly there*, so playing an actual game with it needs some hacking.~~ The game is currently playable in a local environment. An online multiplayer is on its way as well in the future. The multiplayer is/will be accomplished with client-server technology. Users will mainly connect to each other via a lobby (which is a separate project), but direct connecting will be supported in the future.
+The game consists of a functional local single- and multiplayer gameplay. Selecting **Settings** or **Play online** from the main menu still do nothing in particular. 
+
+##### 0.0.9
+
+As of now, the game consists of a functional local single- and multiplayer. The game is currently playable in a local environment. An online multiplayer is on its way as well in the future. The multiplayer is/will be accomplished with client-server technology. Users will mainly connect to each other via a lobby (which is a separate project), but direct connecting will be supported in the future.
 
 The current version will remain as 0.0.9 until fully functional local gameplay is accomplished, which I see as an appropriate milestone that can be shown off to those who are interested in this project (hi grandma). By *fully functional local gameplay* I mean being able to:
 
@@ -29,5 +33,5 @@ The current version will remain as 0.0.9 until fully functional local gameplay i
   - [x] Being able to configure the size of the game area.
   - [x] Setup and launch the game according to these configurations.
 - [x] Preload each game.
-- [ ] Show the preloader's progress.
+- [x] Show the preloader's progress.
 - [x] Examine the game back and forth. That is, after the game has been preloaded, it should be possible to play the game as a recording that can be rewinded, fast forwarded and paused at will. **Core functionality exists**: some tinkering and visual enchancements are still appropriate.
