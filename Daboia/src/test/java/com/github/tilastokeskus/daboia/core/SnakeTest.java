@@ -138,8 +138,8 @@ public class SnakeTest {
     @Test
     public void method_copy_shouldReturnCopy() {
         Snake s = snake.copy();
-        assertTrue("Pieces should be cloned", onlyEquals(s.getHead(), snake.getHead()));
-        assertTrue("Pieces should be cloned", onlyEquals(s.getTail(), snake.getTail()));
+        assertEquals("Pieces should be cloned", s.getHead(), snake.getHead());
+        assertEquals("Pieces should be cloned", s.getTail(), snake.getTail());
         assertTrue("List of pieces should be cloned", onlyEquals(s.getPieces(), snake.getPieces()));
         assertEquals("Lengths should be same", s.getLength(), snake.getLength());
     }
