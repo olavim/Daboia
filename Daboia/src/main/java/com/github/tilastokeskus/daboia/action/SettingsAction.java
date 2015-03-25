@@ -14,7 +14,7 @@ public class SettingsAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        SettingsDialog window = new SettingsDialog(Main.getMainInterface().getFrame());
-        window.showDialog();
+//        SettingsDialog window = new SettingsDialog(Main.getMainInterface().getFrame());
+//        window.showDialog();
     }            
 }
