@@ -42,14 +42,6 @@ public class PlayerTest {
     public void method_copy_shouldReturnCopy() {        
         Player p = player.copy();
         assertTrue(player.equals(p));
-        player.setIsAlive(false);
-        assertFalse(player.equals(p));
-        p = player.copy();
-        assertTrue(player.equals(p));
-        player.setShouldBeDrawn(false);
-        assertFalse(player.equals(p));
-        p = player.copy();
-        assertTrue(player.equals(p));
     }
 
     @Test

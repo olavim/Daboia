@@ -5,7 +5,7 @@ import com.github.tilastokeskus.daboia.core.game.ai.DaboiaLogic;
 import com.github.tilastokeskus.daboia.core.Direction;
 import com.github.tilastokeskus.daboia.core.Player;
 
-public final class GamePreloader {
+public class GamePreloader {
     
     private final SavedStateGame game;
     
@@ -28,20 +28,17 @@ public final class GamePreloader {
         game.rewind();            /* rewind the game back to the beginning */
     }
     
-    public double getProgress() {
-        int numPlayers = game.numPlayers();
-        int numPlayersAlive = game.numPlayersAlive();
-        
-        if (numPlayers == 1)
-            return 0;
-        
-        return 1.0 - 1.0 * numPlayersAlive / (numPlayers - 1);
+    public double getProgress() {        
+        return 1 - (1.0 * game.numUnoccupied() / (game.getHeight() * game.getWidth()));
     }
 
     private void playGame() {
+        double lastState = getProgress();
         while (!game.isGameOver()) {
             playRound();
             game.startNextState();
+            if (getProgress() != lastState)
+                lastState = getProgress();
         }
     }
 

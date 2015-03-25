@@ -69,9 +69,7 @@ public class Snake implements Cloneable, java.io.Serializable {
     
     public Snake copy() {
         Snake snakeCopy = new Snake();
-        snakeCopy.setPieces(pieces.stream()
-                .map(piece -> new Piece(piece))
-                .collect(Collectors.toList()));
+        snakeCopy.setPieces(new ArrayList<>(pieces));
         snakeCopy.length = length;
         return snakeCopy;
     }

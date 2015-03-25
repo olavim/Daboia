@@ -119,17 +119,7 @@ public class Player implements java.io.Serializable {
         if (getClass() != obj.getClass()) return false;
         
         final Player other = (Player) obj;
-        if (id != other.id
-                || !Objects.equals(name, other.name)
-                || !Objects.equals(logicHandler, other.logicHandler)
-                || !Objects.equals(snake, other.snake)
-                || !Objects.equals(snakeColor, other.snakeColor)
-                || initialX != other.initialX
-                || initialY != other.initialY
-                || isAlive != other.isAlive
-                || shouldBeDrawn != other.shouldBeDrawn)
-            return false;
-        return true;
+        return id == other.id && Objects.equals(name, other.name);
     }
 
     @Override
@@ -137,13 +127,6 @@ public class Player implements java.io.Serializable {
         int hash = 5;
         hash = 53 * hash + this.id;
         hash = 53 * hash + Objects.hashCode(this.name);
-        hash = 53 * hash + this.initialX;
-        hash = 53 * hash + this.initialY;
-        hash = 53 * hash + Objects.hashCode(this.logicHandler);
-        hash = 53 * hash + Objects.hashCode(this.snake);
-        hash = 53 * hash + Objects.hashCode(this.snakeColor);
-        hash = 53 * hash + (this.isAlive ? 1 : 0);
-        hash = 53 * hash + (this.shouldBeDrawn ? 1 : 0);
         return hash;
     }
 

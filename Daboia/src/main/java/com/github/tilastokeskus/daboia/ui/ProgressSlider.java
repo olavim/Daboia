@@ -46,6 +46,8 @@ public class ProgressSlider extends JComponent {
             throw new IllegalArgumentException();
         this.value = value;
         notifyListeners();
+        revalidate();
+        repaint();
     }
     
     public void setPercent(double percent) {
@@ -96,15 +98,11 @@ public class ProgressSlider extends JComponent {
         @Override
         public void mousePressed(MouseEvent e) {
             updateValue(e.getX());
-            revalidate();
-            repaint();
         }
         
         @Override
         public void mouseDragged(MouseEvent e) {
             updateValue(e.getX());
-            revalidate();
-            repaint();
         }
         
         private void updateValue(int mouseX) {

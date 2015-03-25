@@ -1,20 +1,21 @@
 package com.github.tilastokeskus.daboia;
 
 import com.github.tilastokeskus.daboia.config.ConfigurationManager;
-import com.github.tilastokeskus.daboia.core.game.GamePreloader;
 import com.github.tilastokeskus.daboia.core.game.GameSettings;
 import com.github.tilastokeskus.daboia.core.Player;
+import com.github.tilastokeskus.daboia.core.game.ConcurrentGamePreloader;
 import com.github.tilastokeskus.daboia.core.game.GameStatePlayer;
-import com.github.tilastokeskus.daboia.core.game.ControllableWindowedGameHandler;
 import com.github.tilastokeskus.daboia.core.game.GameHandlerController;
 import com.github.tilastokeskus.daboia.core.game.SavedStateGame;
 import com.github.tilastokeskus.daboia.ui.MainWindow;
 import com.github.tilastokeskus.daboia.plugin.PluginManager;
+import com.github.tilastokeskus.daboia.ui.PreloaderProgressDialog;
 import com.github.tilastokeskus.daboia.util.ReplayUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 public class Main {    
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
@@ -52,19 +53,23 @@ public class Main {
         
         try {
             SavedStateGame game = new SavedStateGame(players, width, height);
-            GamePreloader preloader = new GamePreloader(game);
-            preloader.preload();
-            
-            if (savePreview) {
-                try {
-                    String replayName = ReplayUtils.getReplayName();
-                    ReplayUtils.saveReplay(game, replayName);
-                } catch (IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
+            ConcurrentGamePreloader preloader = new ConcurrentGamePreloader(game);
+            PreloaderProgressDialog progress = new PreloaderProgressDialog(preloader);
+            SwingUtilities.invokeLater(progress);
+            preloader.preload(() -> {
+                progress.closeWindow();
+                
+                if (savePreview) {
+                    try {
+                        String replayName = ReplayUtils.getReplayName();
+                        ReplayUtils.saveReplay(game, replayName);
+                    } catch (IOException ex) {
+                        LOGGER.log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-            
-            launchPreloadedGame(game, refreshrate);
+
+                launchPreloadedGame(game, refreshrate);
+            });
         } catch (IllegalArgumentException ex) {
             System.err.println("Could not launch game: " + ex.getMessage());
             System.err.println("Terminating...");
